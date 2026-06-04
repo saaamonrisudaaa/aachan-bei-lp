@@ -315,6 +315,14 @@ h3 {
   border-radius: 8px;
 }
 
+.shop-photo {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  object-fit: cover;
+}
+
 .placeholder {
   display: grid;
   place-items: center;
@@ -334,6 +342,10 @@ h3 {
 
 .cafe {
   background: linear-gradient(135deg, #73c8aa, #73acd1);
+}
+
+.chinese {
+  background: linear-gradient(135deg, #d94f45, #f6c85f);
 }
 
 .shop-body {
