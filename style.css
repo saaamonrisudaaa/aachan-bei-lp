@@ -126,6 +126,10 @@ h1 {
   letter-spacing: 0;
 }
 
+h1 span {
+  display: block;
+}
+
 h2 {
   margin: 0;
   font-family: "M PLUS Rounded 1c", sans-serif;
