@@ -1,0 +1,27 @@
+name: Apply cafe image
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Apply image style
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('style.css')
+          s = p.read_text()
+          s = s.replace('background: linear-gradient(135deg, #73c8aa, #73acd1);', "background: url('./assets/sta-kanda.jpg') center / cover no-repeat;\n  color: transparent;")
+          p.write_text(s)
+          PY
+          rm .github/workflows/apply-cafe-image.yml
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add style.css assets/sta-kanda.jpg .github/workflows/apply-cafe-image.yml
+          git commit -m "Show Sta Kanda photo in third card"
+          git push
