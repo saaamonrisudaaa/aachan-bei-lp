@@ -341,7 +341,8 @@ h3 {
 }
 
 .cafe {
-  background: linear-gradient(135deg, #73c8aa, #73acd1);
+  background: url('./assets/sta-kanda.jpg') center / cover no-repeat;
+  color: transparent;
 }
 
 .chinese {
