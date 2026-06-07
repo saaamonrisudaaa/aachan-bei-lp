@@ -1,0 +1,40 @@
+name: Fix About heading
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Keep About title on two lines
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          p = Path('index.html')
+          text = p.read_text(encoding='utf-8')
+          old = '<h2>Instagramの投稿を<br>もっと詳しく</h2>'
+          new = '<h2 class="about-heading"><span>Instagramの投稿を</span><span>もっと詳しく</span></h2>'
+          if old not in text:
+              raise SystemExit('About heading was not found')
+          p.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+          css = Path('style.css')
+          styles = css.read_text(encoding='utf-8')
+          rule = '''\n.about-heading span {\n  display: block;\n  white-space: nowrap;\n}\n\n.about-heading span:first-child {\n  font-size: 0.82em;\n}\n'''
+          if '.about-heading span {' not in styles:
+              css.write_text(styles + rule, encoding='utf-8')
+          PY
+      - name: Remove temporary workflow
+        run: rm .github/workflows/fix-about-heading.yml
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html style.css .github/workflows/fix-about-heading.yml
+          git commit -m "Keep About heading on two lines"
+          git push
