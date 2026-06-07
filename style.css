@@ -648,3 +648,12 @@ dd {
     font-size: 24px;
   }
 }
+
+.about-heading span {
+  display: block;
+  white-space: nowrap;
+}
+
+.about-heading span:first-child {
+  font-size: 0.82em;
+}
