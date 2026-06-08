@@ -1,0 +1,38 @@
+name: Fix directory accessibility style
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/fix-directory-a11y.yml
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add visually hidden utility
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('shops.html')
+          text=path.read_text(encoding='utf-8')
+          marker='    .directory-main{overflow:visible}'
+          replacement='    .visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}\n'+marker
+          if '.visually-hidden{position:absolute' not in text:
+              if marker not in text: raise SystemExit('Style marker not found')
+              text=text.replace(marker,replacement,1)
+              path.write_text(text,encoding='utf-8')
+          PY
+      - name: Commit update
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add shops.html
+          git commit -m 'Polish restaurant directory accessibility'
+          git push
