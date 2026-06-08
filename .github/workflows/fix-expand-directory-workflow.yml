@@ -1,0 +1,44 @@
+name: Fix complete directory generator
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/fix-expand-directory-workflow.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Correct Python link generation
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('.github/workflows/expand-directory-81.yml')
+          text=path.read_text(encoding='utf-8')
+          old='''              if old.get('local_href'):
+                  actions.append(f'<a class="local-link" href="{escape(old["local_href"],quote=True)}">{escape(old["local_text"] or "詳しい記事")}</a>')
+              actions.append(f'<a class="external-link" href="{escape(item["url"],quote=True)}" target="_blank" rel="noopener">食べログを見る</a>')'''
+          new='''              if old.get('local_href'):
+                  local_href=escape(old['local_href'],quote=True)
+                  local_text=escape(old['local_text'] or '詳しい記事')
+                  actions.append(f'<a class="local-link" href="{local_href}">{local_text}</a>')
+              tabelog_url=escape(item['url'],quote=True)
+              actions.append(f'<a class="external-link" href="{tabelog_url}" target="_blank" rel="noopener">食べログを見る</a>')'''
+          if old not in text:
+              raise SystemExit('Target Python block not found')
+          path.write_text(text.replace(old,new,1),encoding='utf-8')
+          PY
+      - name: Commit generator fix
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add .github/workflows/expand-directory-81.yml
+          git commit -m 'Fix complete directory generator'
+          git push
