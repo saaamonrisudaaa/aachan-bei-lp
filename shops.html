@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JF0EBJ85Z0"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-JF0EBJ85Z0');</script>
+  <title>お店を探す | あーちゃんべいグルメ</title>
+  <meta name="description" content="あーちゃんべいが訪問したお店を、エリア・ジャンル・キーワードで検索できます。口コミの要点を短くまとめた店舗一覧です。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700;800&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="stylesheet" href="./mobile.css" media="(max-width:560px)">
+  <style>
+    .directory-main{overflow:visible}
+    .directory-hero{max-width:1120px;margin:0 auto;padding:72px 18px 30px}
+    .directory-hero h1{font-size:clamp(38px,6vw,66px)}
+    .directory-hero .lead{max-width:760px}
+    .source-note{display:inline-flex;margin-top:18px;color:#775d51;font-size:13px}
+    .directory-shell{max-width:1120px;margin:0 auto;padding:24px 18px 80px}
+    .filter-panel{position:sticky;top:75px;z-index:5;display:grid;grid-template-columns:minmax(220px,1.5fr) repeat(2,minmax(150px,.7fr)) auto;gap:12px;padding:16px;background:rgba(255,250,243,.96);border:1px solid #ead8c7;border-radius:16px;box-shadow:0 12px 30px rgba(89,54,28,.12);backdrop-filter:blur(14px)}
+    .filter-field{display:grid;gap:5px;color:#775d51;font-size:12px;font-weight:700}
+    .filter-field input,.filter-field select{width:100%;min-height:46px;padding:9px 12px;color:#38251d;background:#fff;border:2px solid #ead8c7;border-radius:10px;font:inherit;font-size:14px}
+    .filter-field input:focus,.filter-field select:focus{outline:3px solid rgba(255,127,143,.28);border-color:#ff7f8f}
+    .reset-filter{align-self:end;min-height:46px;padding:9px 15px;color:#38251d;background:#fff;border:2px solid #38251d;border-radius:999px;font-weight:800;cursor:pointer}
+    .directory-status{display:flex;justify-content:space-between;gap:16px;margin:22px 2px 14px;color:#775d51;font-size:13px}
+    .directory-status strong{color:#38251d;font-size:16px}
+    .directory-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .directory-card{display:flex;min-width:0;flex-direction:column;padding:20px;background:#fff;border:2px solid #38251d;border-radius:14px;box-shadow:4px 5px 0 rgba(56,37,29,.84)}
+    .directory-card[hidden]{display:none}
+    .directory-card-head{display:flex;align-items:flex-start;gap:13px}
+    .shop-initial{display:grid;flex:0 0 48px;width:48px;height:48px;place-items:center;color:#fff;background:linear-gradient(135deg,#ff7f8f,#ffb26f);border:2px solid #38251d;border-radius:12px;font-family:"M PLUS Rounded 1c",sans-serif;font-size:20px;font-weight:800}
+    .directory-card h2{font-size:21px;line-height:1.4}
+    .directory-meta{margin:4px 0 0;color:#775d51;font-size:13px}
+    .directory-tags{display:flex;flex-wrap:wrap;gap:6px;margin:14px 0 0}
+    .directory-tags span{padding:4px 8px;color:#276b5d;background:#f2fbf7;border:1px solid #c7eadf;border-radius:999px;font-size:11px;font-weight:700}
+    .review-summary{margin:14px 0 0;color:#5f493f;font-size:14px;line-height:1.75}
+    .directory-actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:auto;padding-top:17px}
+    .directory-actions a{display:inline-flex;align-items:center;justify-content:center;min-height:42px;padding:8px 13px;border:2px solid #38251d;border-radius:999px;font-size:13px;font-weight:800;text-decoration:none}
+    .directory-actions .local-link{color:#fff;background:#ff7f8f}
+    .directory-actions .external-link{background:#fff}
+    .empty-state{display:none;padding:54px 20px;color:#775d51;text-align:center;background:#fff;border:1px solid #ead8c7;border-radius:14px}
+    .empty-state.show{display:block}
+    .directory-disclaimer{margin:24px 0 0;padding:14px 16px;color:#775d51;background:#fff8ed;border:1px solid #edc9a8;border-radius:10px;font-size:12px}
+    @media(max-width:760px){.filter-panel{position:static;grid-template-columns:1fr 1fr}.filter-field:first-child{grid-column:1/-1}.reset-filter{width:100%}.directory-grid{grid-template-columns:1fr}}
+    @media(max-width:560px){.directory-hero{padding:36px 16px 18px}.directory-hero h1{font-size:34px}.directory-shell{padding:16px 16px 56px}.filter-panel{grid-template-columns:1fr;padding:13px}.filter-field:first-child{grid-column:auto}.directory-status{display:block}.directory-card{padding:16px}.directory-actions{display:grid;grid-template-columns:1fr 1fr}.directory-actions a{text-align:center}}
+  </style>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2339565086393570" crossorigin="anonymous"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="./index.html"><img src="./assets/risu.jpg" alt="" class="brand-mark"><span>あーちゃんべいグルメ</span></a>
+    <nav class="header-nav" aria-label="メインナビゲーション"><a href="./index.html#ranking">ランキング</a><a href="./shops.html">お店を探す</a><a href="./privacy.html">運営情報</a></nav>
+  </header>
+
+  <main class="directory-main">
+    <section class="directory-hero">
+      <p class="eyebrow">Restaurant Finder</p>
+      <h1>行ったお店から探す</h1>
+      <p class="lead">エリア、ジャンル、店名から気になるお店をすばやく検索。実際に訪問したときの印象を、選びやすい長さにまとめています。</p>
+      <a class="source-note" href="https://tabelog.com/rvwr/003533852/visited_restaurants/list" target="_blank" rel="noopener">食べログの訪問店一覧を見る</a>
+    </section>
+
+    <section class="directory-shell" aria-labelledby="directory-title">
+      <h2 id="directory-title" class="visually-hidden">訪問店一覧</h2>
+      <div class="filter-panel" aria-label="店舗の絞り込み">
+        <label class="filter-field"><span>店名・口コミから検索</span><input id="shop-search" type="search" placeholder="例：ラーメン、錦糸町、寿司" autocomplete="off"></label>
+        <label class="filter-field"><span>エリア</span><select id="area-filter"><option value="all">すべてのエリア</option><option value="tokyo">東京</option><option value="chiba">千葉</option><option value="other">その他のエリア</option><option value="kinshicho">錦糸町</option><option value="koiwa">小岩</option><option value="shibuya-ebisu">渋谷・恵比寿</option><option value="tama">多摩・西東京</option></select></label>
+        <label class="filter-field"><span>ジャンル</span><select id="genre-filter"><option value="all">すべてのジャンル</option><option value="izakaya">居酒屋・バー</option><option value="ramen">ラーメン</option><option value="cafe">カフェ</option><option value="chinese">中華・餃子</option><option value="japanese">和食・寿司</option><option value="other">その他</option></select></label>
+        <button class="reset-filter" id="reset-filter" type="button">条件をクリア</button>
+      </div>
+
+      <div class="directory-status" aria-live="polite"><strong><span id="result-count">20</span>店を表示</strong><span>口コミは訪問時の内容を短く要約しています</span></div>
+
+      <div class="directory-grid" id="directory-grid">
+        <article class="directory-card" data-area="other nagoya" data-genre="cafe" data-search="星乃珈琲店 名古屋 タワーズプラザ カフェ カツカレー コーヒー">
+          <div class="directory-card-head"><span class="shop-initial">星</span><div><h2>星乃珈琲店 名古屋タワーズプラザ店</h2><p class="directory-meta">愛知・名古屋駅｜～1,999円</p></div></div><div class="directory-tags"><span>カフェ</span><span>駅近</span><span>混雑注意</span></div><p class="review-summary">カツカレーとコーヒーを注文。ホテルのような丁寧な接客が印象的でした。人気店で入口付近に待ち客が多く、時間に余裕を持った訪問がおすすめです。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/aichi/A2301/A230101/23072858/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo koiwa" data-genre="izakaya other" data-search="バー ベースメント 小岩 バー ハンバーガー タコス ナチョス">
+          <div class="directory-card-head"><span class="shop-initial">B</span><div><h2>バー ベースメント</h2><p class="directory-meta">東京・小岩｜2,000～2,999円</p></div></div><div class="directory-tags"><span>バー</span><span>ハンバーガー</span><span>予約推奨</span></div><p class="review-summary">タコス、ナチョス、ガパオバーガーまで料理の満足度が高い一軒。アメリカンな店内と丁寧な接客も魅力です。人気があるため予約しておくと安心です。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/tokyo/A1312/A131204/13276055/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo kinshicho" data-genre="japanese izakaya" data-search="坊々樹 錦糸町 日本料理 海鮮 居酒屋">
+          <div class="directory-card-head"><span class="shop-initial">坊</span><div><h2>坊々樹</h2><p class="directory-meta">東京・錦糸町｜夜 6,000～7,999円</p></div></div><div class="directory-tags"><span>日本料理</span><span>海鮮</span><span>居酒屋</span></div><p class="review-summary">錦糸町で質の高い和食と海鮮を楽しみたい日に候補へ入れたいお店。料理のクオリティが高く、落ち着いて食事をしたい夜に向いています。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/tokyo/A1312/A131201/13221554/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="other hashima" data-genre="japanese" data-search="なまずや 羽島分店 岐阜 新羽島 うなぎ ひつまぶし">
+          <div class="directory-card-head"><span class="shop-initial">鰻</span><div><h2>なまずや 羽島分店</h2><p class="directory-meta">岐阜・新羽島｜2,000～3,999円</p></div></div><div class="directory-tags"><span>うなぎ</span><span>ひつまぶし</span><span>ボリューム</span></div><p class="review-summary">ひつまぶしはご飯とうなぎがたっぷりで、薬味や出汁も惜しみなく提供。価格は高めですが、満腹感と満足度を求める日に選びたい一軒です。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/gifu/A2101/A210102/21006469/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo tama" data-genre="chinese izakaya" data-search="sinensis 吉祥寺 中華料理 餃子 居酒屋 町中華">
+          <div class="directory-card-head"><span class="shop-initial">S</span><div><h2>sinensis</h2><p class="directory-meta">東京・吉祥寺｜昼 1,000～1,999円</p></div></div><div class="directory-tags"><span>中華料理</span><span>餃子</span><span>町中華</span></div><p class="review-summary">ビブグルマン掲載店で経験を積んだ店主が手がける町中華。気軽さがありつつ、料理にはひと工夫と確かな技術を感じられるお店です。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/tokyo/A1320/A132001/13301981/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="other osaka" data-genre="other japanese" data-search="梅田 釜たけうどん 大阪 うどん カレーうどん 天ぷら ちくわ天">
+          <div class="directory-card-head"><span class="shop-initial">饂</span><div><h2>梅田 釜たけうどん</h2><p class="directory-meta">大阪・梅田｜～999円</p></div></div><div class="directory-tags"><span>うどん</span><span>天ぷら</span><span>百名店</span></div><p class="review-summary">もちっとしたうどんと、香ばしく揚がったちくわ天が印象に残る一杯。新梅田食道街で、手頃に満足感のある食事をしたいときに便利です。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/osaka/A2701/A270101/27052204/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo kinshicho" data-genre="ramen" data-search="漢ラーメン 室 錦糸町 住吉 家系 ラーメン">
+          <div class="directory-card-head"><span class="shop-initial">漢</span><div><h2>漢ラーメン 室</h2><p class="directory-meta">東京・錦糸町｜～1,999円</p></div></div><div class="directory-tags"><span>ラーメン</span><span>濃厚</span><span>人気店</span></div><p class="review-summary">固め・濃いめで注文。濃厚なスープはご飯との相性がよく、大判チャーシューも食べ応え十分です。混雑しやすいため、空いている時間に入れたら好機。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/tokyo/A1312/A131201/13246530/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo tama" data-genre="chinese" data-search="POT 東久留米 中華料理 カレー 餃子 酢豚 杏仁豆腐">
+          <div class="directory-card-head"><span class="shop-initial">P</span><div><h2>POT 東久留米店</h2><p class="directory-meta">東京・東久留米｜1,000～2,999円</p></div></div><div class="directory-tags"><span>中華料理</span><span>餃子</span><span>デザート</span></div><p class="review-summary">よだれどり、餃子、酢豚、角煮から杏仁豆腐まで満足度の高い料理が続きます。清潔な店内と丁寧な接客も好印象。辛い麺は辛さが苦手な方には注意です。</p><div class="directory-actions"><a class="local-link" href="./pot-higashikurume.html">詳しい記事</a><a class="external-link" href="https://tabelog.com/tokyo/A1328/A132802/13290218/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo koiwa" data-genre="japanese izakaya" data-search="八丈島郷土料理 源八船頭 小岩 居酒屋 海鮮 島寿司">
+          <div class="directory-card-head"><span class="shop-initial">八</span><div><h2>八丈島郷土料理 源八船頭 小岩本店</h2><p class="directory-meta">東京・小岩｜3,000～3,999円</p></div></div><div class="directory-tags"><span>居酒屋</span><span>海鮮</span><span>郷土料理</span></div><p class="review-summary">甘めの漬けダレとからしが効いた島寿司、香りのよい明日葉の天ぷらが印象的。平日も賑わう人気店なので事前予約がおすすめです。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/tokyo/A1312/A131204/13032929/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo kinshicho" data-genre="japanese" data-search="立食い寿司 根室花まる 錦糸町 テルミナ 寿司 サーモン">
+          <div class="directory-card-head"><span class="shop-initial">鮨</span><div><h2>立食い寿司 根室花まる 錦糸町テルミナ店</h2><p class="directory-meta">東京・錦糸町｜2,000～3,999円</p></div></div><div class="directory-tags"><span>寿司</span><span>立ち食い</span><span>高コスパ</span></div><p class="review-summary">炙り系を中心にネタの鮮度と香ばしさが好印象。行列はあるものの回転が速く、テンポよく質の高い寿司を楽しめます。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/tokyo/A1312/A131201/13279697/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo tama" data-genre="other" data-search="ガラク 東京八王子 スープカレー カレー 現金">
+          <div class="directory-card-head"><span class="shop-initial">咖</span><div><h2>ガラク 東京八王子店</h2><p class="directory-meta">東京・八王子｜1,000～1,999円</p></div></div><div class="directory-tags"><span>スープカレー</span><span>ランチ</span><span>現金のみ</span></div><p class="review-summary">遅めのランチでは提供が早く、スパイス感のあるスープカレーをゆっくり楽しめました。接客も親切。訪問時は現金のみだったため準備しておくと安心です。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/tokyo/A1329/A132904/13176366/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo kinshicho" data-genre="izakaya japanese" data-search="おでん きんぎょと風鈴 錦糸町 居酒屋 海鮮">
+          <div class="directory-card-head"><span class="shop-initial">お</span><div><h2>おでん きんぎょと風鈴</h2><p class="directory-meta">東京・錦糸町｜3,000～3,999円</p></div></div><div class="directory-tags"><span>おでん</span><span>居酒屋</span><span>海鮮</span></div><p class="review-summary">錦糸町でおでんを食べたい夜に思い出したい一軒。温かい料理と海鮮をつまみながら、落ち着いて飲みたいときに向いています。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/tokyo/A1312/A131201/13212045/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo kinshicho" data-genre="ramen" data-search="家家家 錦糸町 家系 ラーメン 白髪ネギ ライス">
+          <div class="directory-card-head"><span class="shop-initial">家</span><div><h2>家家家 錦糸町店</h2><p class="directory-meta">東京・錦糸町｜1,000～1,999円</p></div></div><div class="directory-tags"><span>家系ラーメン</span><span>白髪ネギ</span><span>ライス無料</span></div><p class="review-summary">固め・濃いめの一杯に白髪ネギを追加。無料ライスへラー油をかけ、スープを含んだ海苔で巻く食べ方がおすすめです。提供の早さも魅力。</p><div class="directory-actions"><a class="local-link" href="./yayaya-kinshicho.html">詳しい記事</a><a class="external-link" href="https://tabelog.com/tokyo/A1312/A131201/13133430/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="other nagano" data-genre="japanese" data-search="勝縁 時又 長野 そば 天ぷら 山菜 かき揚げ">
+          <div class="directory-card-head"><span class="shop-initial">蕎</span><div><h2>勝縁</h2><p class="directory-meta">長野・時又｜1,000～1,999円</p></div></div><div class="directory-tags"><span>そば</span><span>天ぷら</span><span>早めの訪問</span></div><p class="review-summary">山菜天ぷらとそばを静かな空間で楽しめます。正午頃にはそばが売り切れる日もあるため、開店に合わせた早めの訪問がおすすめです。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/nagano/A2006/A200603/20002508/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo shibuya-ebisu" data-genre="izakaya japanese" data-search="虎うま 渋谷 神泉 居酒屋 馬肉 日本酒 馬刺し">
+          <div class="directory-card-head"><span class="shop-initial">虎</span><div><h2>虎うま</h2><p class="directory-meta">東京・渋谷｜4,000～4,999円</p></div></div><div class="directory-tags"><span>居酒屋</span><span>馬肉料理</span><span>日本酒</span></div><p class="review-summary">馬刺しは量がしっかりあり、揚げ物などの料理も質が高め。日本酒の種類が豊富ですが、希少銘柄は価格も上がるため注文時に確認すると安心です。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/tokyo/A1303/A130301/13173914/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo tokyo-station" data-genre="other izakaya" data-search="Mole TAQUERIA Y BAR 東京駅 メキシコ料理 タコス ナチョス バル">
+          <div class="directory-card-head"><span class="shop-initial">M</span><div><h2>Mole TAQUERIA Y BAR</h2><p class="directory-meta">東京・東京駅｜1,000～3,999円</p></div></div><div class="directory-tags"><span>メキシコ料理</span><span>タコス</span><span>バル</span></div><p class="review-summary">ナチョスは塩味・辛味・コクのバランスがよく、お酒との相性も良好。種類豊富なタコスをカジュアルに楽しめ、友人との食事やデートにも使いやすい雰囲気です。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/tokyo/A1302/A130201/13283928/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo shibuya-ebisu" data-genre="izakaya" data-search="YEBISU BAR STAND 恵比寿 ガーデンプレイス ビアバー ビーフシチュー">
+          <div class="directory-card-head"><span class="shop-initial">麦</span><div><h2>YEBISU BAR STAND 恵比寿ガーデンプレイス店</h2><p class="directory-meta">東京・恵比寿｜1,000～2,999円</p></div></div><div class="directory-tags"><span>ビアバー</span><span>ビール</span><span>ビーフシチュー</span></div><p class="review-summary">個性の違うビールを飲み比べでき、料理ではほろほろのビーフシチューが印象的。価格はやや高めでも、少し贅沢に楽しみたい日に合います。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/tokyo/A1303/A130302/13276026/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo shibuya-ebisu" data-genre="chinese japanese" data-search="餃子の福包 代々木八幡 代々木公園 餃子 ランチ">
+          <div class="directory-card-head"><span class="shop-initial">餃</span><div><h2>餃子の福包 代々木八幡店</h2><p class="directory-meta">東京・代々木八幡｜昼 ～999円</p></div></div><div class="directory-tags"><span>餃子</span><span>ランチ</span><span>駅近</span></div><p class="review-summary">代々木八幡駅近くで、気軽に餃子ランチを楽しみたい日に便利。手頃な価格帯で、短時間の食事にも選びやすいお店です。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/tokyo/A1318/A131810/13172469/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="chiba" data-genre="izakaya japanese" data-search="ネオ和食居酒屋 君に会えてよかった 海浜幕張 居酒屋 日本料理 海鮮">
+          <div class="directory-card-head"><span class="shop-initial">君</span><div><h2>ネオ和食居酒屋 君に会えてよかった。海浜幕張店</h2><p class="directory-meta">千葉・海浜幕張｜1,000～3,999円</p></div></div><div class="directory-tags"><span>居酒屋</span><span>和食</span><span>海鮮</span></div><p class="review-summary">海浜幕張で和食と海鮮を中心に楽しめる居酒屋。ランチから夜の食事まで使いやすく、複数人で料理を囲みたい日に候補へ入れやすい一軒です。</p><div class="directory-actions"><a class="external-link" href="https://tabelog.com/chiba/A1201/A120102/12061198/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+
+        <article class="directory-card" data-area="tokyo kanda" data-genre="cafe izakaya japanese" data-search="Sta. 神田 秋葉原 カフェ 創作料理 唐揚げ定食 チーズケーキ">
+          <div class="directory-card-head"><span class="shop-initial">S</span><div><h2>Sta. 神田</h2><p class="directory-meta">東京・神田／秋葉原｜昼 1,000～1,999円</p></div></div><div class="directory-tags"><span>カフェ</span><span>創作料理</span><span>予約推奨</span></div><p class="review-summary">彩りと栄養バランスがよい唐揚げ定食は、軽い衣とジューシーな中身が魅力。四角いチーズケーキも濃厚ながら重すぎません。週末ランチは事前予約がおすすめです。</p><div class="directory-actions"><a class="local-link" href="./sta-kanda.html">詳しい記事</a><a class="external-link" href="https://tabelog.com/tokyo/A1310/A131002/13257405/" target="_blank" rel="noopener">食べログを見る</a></div>
+        </article>
+      </div>
+
+      <div class="empty-state" id="empty-state"><strong>条件に合うお店がありませんでした。</strong><br>検索語や絞り込み条件を変えてお試しください。</div>
+      <p class="directory-disclaimer">掲載内容は訪問時の個人的な感想を要約したものです。価格、営業時間、メニューなどは変更される場合があります。来店前に各店舗の公式情報をご確認ください。</p>
+    </section>
+  </main>
+
+  <footer class="site-footer"><img src="./assets/risu.jpg" alt="" class="footer-mark"><p>あーちゃんべいグルメ</p><a href="./privacy.html">運営者情報・プライバシーポリシー</a><small>&copy; 2026 Ah Bei Gourmet. All rights reserved.</small></footer>
+
+  <script>
+    const cards=[...document.querySelectorAll('.directory-card')];
+    const search=document.getElementById('shop-search');
+    const area=document.getElementById('area-filter');
+    const genre=document.getElementById('genre-filter');
+    const count=document.getElementById('result-count');
+    const empty=document.getElementById('empty-state');
+    const normalize=value=>value.toLowerCase().normalize('NFKC').replace(/\s+/g,' ');
+    function applyFilters(){
+      const term=normalize(search.value.trim());
+      let visible=0;
+      cards.forEach(card=>{
+        const matchesTerm=!term||normalize(card.dataset.search+' '+card.textContent).includes(term);
+        const matchesArea=area.value==='all'||card.dataset.area.split(' ').includes(area.value);
+        const matchesGenre=genre.value==='all'||card.dataset.genre.split(' ').includes(genre.value);
+        const show=matchesTerm&&matchesArea&&matchesGenre;
+        card.hidden=!show;
+        if(show) visible++;
+      });
+      count.textContent=visible;
+      empty.classList.toggle('show',visible===0);
+    }
+    const params=new URLSearchParams(location.search);
+    if([...area.options].some(option=>option.value===params.get('area'))) area.value=params.get('area');
+    if([...genre.options].some(option=>option.value===params.get('genre'))) genre.value=params.get('genre');
+    if(params.get('q')) search.value=params.get('q');
+    [search,area,genre].forEach(control=>control.addEventListener(control===search?'input':'change',applyFilters));
+    document.getElementById('reset-filter').addEventListener('click',()=>{search.value='';area.value='all';genre.value='all';history.replaceState(null,'',location.pathname);applyFilters();search.focus()});
+    applyFilters();
+  </script>
+</body>
+</html>
