@@ -1,0 +1,48 @@
+name: Verify complete restaurant directory
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/verify-81-restaurants.yml
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate source and public deployment
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json
+          data=json.load(open('tabelog-all.json',encoding='utf-8'))
+          rows=data['restaurants']
+          assert len(rows)==81, len(rows)
+          assert len({row['url'] for row in rows})==81
+          assert len({row['name'] for row in rows})==81
+          PY
+          status=pending
+          for attempt in $(seq 1 20); do
+            page=$(curl -fsSL --max-time 30 "https://achanbay.com/shops.html?verify81=${GITHUB_RUN_ID}_${attempt}" || true)
+            data=$(curl -fsSL --max-time 30 "https://achanbay.com/tabelog-all.json?verify81=${GITHUB_RUN_ID}_${attempt}" || true)
+            if grep -q '行った81店舗から探す' <<<"$page" && grep -q '"count": 81' <<<"$data" && grep -q 'fetch('\''./tabelog-all.json' <<<"$page"; then
+              status=success
+              break
+            fi
+            sleep 15
+          done
+          printf '{"status":"%s","restaurants":81,"unique_names":81,"unique_urls":81,"checked_at":"%s"}\n' "$status" "$(date -u +%FT%TZ)" > directory-81-check.json
+          test "$status" = success
+      - name: Save verification
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add directory-81-check.json
+          git commit -m 'Record 81 restaurant directory verification'
+          git push
