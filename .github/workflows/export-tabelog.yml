@@ -1,0 +1,72 @@
+name: Export Tabelog visit list
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/export-tabelog.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch public visit list
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -L --retry 2 --max-time 45 \
+            -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/137 Safari/537.36' \
+            -H 'Accept-Language: ja-JP,ja;q=0.9' \
+            'https://tabelog.com/rvwr/003533852/visited_restaurants/list/' \
+            -o /tmp/tabelog.html
+          python3 - <<'PY'
+          from html.parser import HTMLParser
+          from urllib.parse import urljoin
+          import html, json, re
+
+          raw = open('/tmp/tabelog.html', encoding='utf-8', errors='ignore').read()
+
+          class Parser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.links=[]; self.href=None; self.text=[]
+              def handle_starttag(self, tag, attrs):
+                  if tag == 'a':
+                      self.href = dict(attrs).get('href')
+                      self.text = []
+              def handle_data(self, data):
+                  if self.href is not None: self.text.append(data)
+              def handle_endtag(self, tag):
+                  if tag == 'a' and self.href is not None:
+                      text=' '.join(''.join(self.text).split())
+                      self.links.append((urljoin('https://tabelog.com', self.href), text))
+                      self.href=None; self.text=[]
+
+          p=Parser(); p.feed(raw)
+          seen=set(); rows=[]
+          pattern=re.compile(r'https://tabelog\.com/(?:tokyo|chiba|saitama|kanagawa)/A\d+/A\d+/\d+/?$')
+          for url, text in p.links:
+              url=url.split('?')[0].split('#')[0]
+              if pattern.match(url) and url not in seen and text:
+                  seen.add(url); rows.append({'name':html.unescape(text), 'url':url})
+
+          visible=re.sub(r'<script\b[^>]*>.*?</script>', ' ', raw, flags=re.I|re.S)
+          visible=re.sub(r'<style\b[^>]*>.*?</style>', ' ', visible, flags=re.I|re.S)
+          visible=html.unescape(re.sub(r'<[^>]+>', ' ', visible))
+          visible=' '.join(visible.split())
+          report={'bytes':len(raw), 'title':re.search(r'<title[^>]*>(.*?)</title>', raw, re.I|re.S).group(1).strip() if re.search(r'<title[^>]*>(.*?)</title>', raw, re.I|re.S) else '', 'restaurants':rows, 'text_sample':visible[:8000]}
+          open('tabelog-export.json','w',encoding='utf-8').write(json.dumps(report,ensure_ascii=False,indent=2))
+          PY
+      - name: Commit compact export
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tabelog-export.json
+          git commit -m 'Export public Tabelog visit list for site update'
+          git push
