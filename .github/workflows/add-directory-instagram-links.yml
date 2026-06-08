@@ -1,0 +1,82 @@
+name: Add directory Instagram links
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/add-directory-instagram-links.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add Instagram links to restaurant cards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          path = Path('shops.html')
+          text = path.read_text(encoding='utf-8')
+          profile = 'https://www.instagram.com/ah_bei_gourmet/?hl=ja'
+          specific = {
+              'POT 東久留米店': 'https://www.instagram.com/p/DWIi4IpkhTC/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==',
+              '家家家 錦糸町店': 'https://www.instagram.com/p/DSfQDhMEr-1/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==',
+              'Sta. 神田': 'https://www.instagram.com/p/DVF73szEgc7/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==',
+          }
+
+          pattern = re.compile(r'<article class="directory-card".*?</article>', re.S)
+          updated = 0
+
+          def add_link(match):
+              nonlocal_updated = None
+              block = match.group(0)
+              if 'class="instagram-link"' in block:
+                  return block
+              title_match = re.search(r'<h2>(.*?)</h2>', block, re.S)
+              title = re.sub(r'<[^>]+>', '', title_match.group(1)).strip() if title_match else '店舗'
+              url = specific.get(title, profile)
+              label = 'Instagram投稿を見る' if title in specific else 'Instagramを見る'
+              link = f'<a class="instagram-link" href="{url}" target="_blank" rel="noopener" aria-label="{title}のInstagramを見る">{label}</a>'
+              marker = '</div>\n        </article>'
+              if marker not in block:
+                  raise SystemExit(f'Action marker not found for {title}')
+              block = block.replace(marker, link + marker, 1)
+              return block
+
+          new_text = pattern.sub(add_link, text)
+          updated = new_text.count('class="instagram-link"')
+          if updated != 20:
+              raise SystemExit(f'Expected 20 Instagram links, found {updated}')
+
+          style_marker = '    .directory-actions .external-link{background:#fff}'
+          style_rule = '    .directory-actions .instagram-link{color:#fff;background:linear-gradient(135deg,#fd5949,#d6249f,#285aeb);border-color:#7d2b72}'
+          if style_rule not in new_text:
+              if style_marker not in new_text:
+                  raise SystemExit('Instagram style marker not found')
+              new_text = new_text.replace(style_marker, style_marker + '\n' + style_rule, 1)
+
+          hero_marker = '<a class="source-note" href="https://tabelog.com/rvwr/003533852/visited_restaurants/list" target="_blank" rel="noopener">食べログの訪問店一覧を見る</a>'
+          hero_instagram = '<a class="source-note" href="https://www.instagram.com/ah_bei_gourmet/?hl=ja" target="_blank" rel="noopener">Instagramの投稿一覧を見る</a>'
+          if hero_instagram not in new_text:
+              if hero_marker not in new_text:
+                  raise SystemExit('Hero source link marker not found')
+              new_text = new_text.replace(hero_marker, hero_marker + '\n      ' + hero_instagram, 1)
+
+          path.write_text(new_text, encoding='utf-8')
+          PY
+      - name: Commit update
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add shops.html
+          git commit -m 'Add Instagram links to restaurant directory'
+          git push
