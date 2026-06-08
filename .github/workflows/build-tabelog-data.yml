@@ -1,0 +1,67 @@
+name: Build complete Tabelog data
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/build-tabelog-data.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip -q install beautifulsoup4
+      - name: Parse all 81 restaurant cards
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, re, time
+          from urllib.request import Request,urlopen
+          from bs4 import BeautifulSoup
+
+          base='https://tabelog.com/rvwr/003533852/visited_restaurants/list/'
+          ua='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/137 Safari/537.36'
+          records=[]; seen=set(); page_counts=[]
+          for page in range(1,6):
+              url=base if page==1 else base+f'?PG={page}'
+              req=Request(url,headers={'User-Agent':ua,'Accept-Language':'ja-JP,ja;q=0.9'})
+              soup=BeautifulSoup(urlopen(req,timeout=45).read(),'html.parser')
+              cards=soup.select('.rvw-item--rvwlst')
+              page_counts.append(len(cards))
+              for card in cards:
+                  link=card.select_one('.simple-rvw__rst-name-target')
+                  if not link: continue
+                  href=link.get('href','').split('?')[0]
+                  if href.startswith('/'): href='https://tabelog.com'+href
+                  if href in seen: continue
+                  seen.add(href)
+                  name=' '.join(link.get_text(' ',strip=True).split())
+                  area_genre=card.select_one('.simple-rvw__area-catg')
+                  area_genre=' '.join(area_genre.get_text(' ',strip=True).split()) if area_genre else ''
+                  area,genre=(area_genre.split(' / ',1)+[''])[:2] if ' / ' in area_genre else (area_genre,'')
+                  budgets=[' '.join(x.get_text(' ',strip=True).split()) for x in card.select('.simple-rvw__budget')]
+                  review=card.select_one('.p-preview-visit__favorite-text')
+                  review=' '.join(review.get_text(' ',strip=True).split()) if review else ''
+                  visit=card.select_one('.p-preview-visit__visited-date')
+                  visit=' '.join(visit.get_text(' ',strip=True).split()) if visit else ''
+                  records.append({'name':name,'url':href,'area':area.strip(),'genre':genre.strip(),'budget':' / '.join(budgets),'visit':visit,'review':review,'source_page':page})
+              time.sleep(1)
+          result={'count':len(records),'page_counts':page_counts,'restaurants':records}
+          open('tabelog-all.json','w',encoding='utf-8').write(json.dumps(result,ensure_ascii=False,indent=2))
+          print({'count':len(records),'page_counts':page_counts})
+          if len(records)!=81:
+              raise SystemExit(f'Expected exactly 81 restaurants, found {len(records)}')
+          PY
+      - name: Commit parsed data
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tabelog-all.json
+          git commit -m 'Build complete 81 restaurant dataset'
+          git push
