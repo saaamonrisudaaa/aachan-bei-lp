@@ -1,0 +1,46 @@
+name: Wire shop directory links
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/wire-shop-directory.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Connect filters and remove placeholder guide
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          path=Path('index.html')
+          text=path.read_text(encoding='utf-8')
+          old_area='<div class="link-grid"><a href="#">東京</a><a href="#">千葉</a><a href="#">渋谷</a><a href="#">新宿</a><a href="#">船橋</a><a href="#">柏</a></div>'
+          new_area='<div class="link-grid"><a href="./shops.html?area=tokyo">東京</a><a href="./shops.html?area=chiba">千葉</a><a href="./shops.html?area=kinshicho">錦糸町</a><a href="./shops.html?area=koiwa">小岩</a><a href="./shops.html?area=shibuya-ebisu">渋谷・恵比寿</a><a href="./shops.html?area=tama">多摩・西東京</a></div>'
+          old_genre='<div class="link-grid"><a href="#">居酒屋</a><a href="#">ラーメン</a><a href="#">カフェ</a><a href="#">中華料理</a><a href="#">女子会</a><a href="#">ひとり飯</a></div>'
+          new_genre='<div class="link-grid"><a href="./shops.html?genre=izakaya">居酒屋・バー</a><a href="./shops.html?genre=ramen">ラーメン</a><a href="./shops.html?genre=cafe">カフェ</a><a href="./shops.html?genre=chinese">中華・餃子</a><a href="./shops.html?genre=japanese">和食・寿司</a><a href="./shops.html?genre=other">その他</a></div>'
+          if old_area not in text or old_genre not in text:
+              raise SystemExit('Expected directory link blocks were not found')
+          text=text.replace(old_area,new_area).replace(old_genre,new_genre)
+          start=text.find('    <section class="section guide">')
+          end=text.find('    <section class="section" id="legal">')
+          if start!=-1 and end!=-1 and start<end:
+              text=text[:start]+text[end:]
+          path.write_text(text,encoding='utf-8')
+          PY
+      - name: Commit page update
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add index.html
+          git commit -m 'Connect area and genre search links'
+          git push
