@@ -1,0 +1,175 @@
+name: Publish complete 81 restaurant directory
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/publish-81-restaurants.yml
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip -q install beautifulsoup4
+      - name: Build complete directory
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from bs4 import BeautifulSoup
+          from html import escape
+          import json, re
+
+          p=Path('shops.html')
+          html=p.read_text(encoding='utf-8')
+          items=json.loads(Path('tabelog-all.json').read_text(encoding='utf-8'))['restaurants']
+          assert len(items)==81, len(items)
+
+          old={}
+          soup=BeautifulSoup(html,'html.parser')
+          for card in soup.select('.directory-card'):
+              title=card.select_one('h2')
+              if not title: continue
+              name=title.get_text(' ',strip=True)
+              summary=card.select_one('.review-summary')
+              local=card.select_one('.local-link')
+              old[name]={
+                  'summary':summary.get_text(' ',strip=True) if summary else '',
+                  'local_href':local.get('href','') if local else '',
+                  'local_text':local.get_text(' ',strip=True) if local else ''
+              }
+
+          profile='https://www.instagram.com/ah_bei_gourmet/?hl=ja'
+          direct={
+            'POT 東久留米店':'https://www.instagram.com/p/DWIi4IpkhTC/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==',
+            '家家家 錦糸町店':'https://www.instagram.com/p/DSfQDhMEr-1/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA==',
+            'Sta. 神田':'https://www.instagram.com/p/DVF73szEgc7/?utm_source=ig_web_copy_link&igsh=MzRlODBiNWFlZA=='
+          }
+          dish_words=['ラーメン','つけ麺','餃子','炒飯','酢豚','角煮','麻婆豆腐','寿司','サーモン','刺身','海鮮','うなぎ','ひつまぶし','そば','うどん','天ぷら','唐揚げ','焼き鳥','おでん','とんかつ','カレー','ハンバーガー','タコス','パスタ','ピザ','ステーキ','焼肉','馬刺し','ビール','日本酒','コーヒー','ケーキ','パン','定食','杏仁豆腐','かき氷','ハンバーグ']
+
+          def filters_genre(g):
+              vals=[]
+              if any(x in g for x in ['居酒屋','バー','バル','ビア']): vals.append('izakaya')
+              if any(x in g for x in ['ラーメン','つけ麺','中華そば']): vals.append('ramen')
+              if any(x in g for x in ['カフェ','喫茶','スイーツ','ケーキ','パン','かき氷']): vals.append('cafe')
+              if any(x in g for x in ['中華','餃子','飲茶','台湾料理']): vals.append('chinese')
+              if any(x in g for x in ['日本料理','寿司','海鮮','そば','蕎麦','うどん','うなぎ','焼き鳥','おでん','天ぷら','とんかつ','和食','郷土料理']): vals.append('japanese')
+              return ' '.join(dict.fromkeys(vals or ['other']))
+
+          def filters_area(item):
+              url=item['url']; a=item.get('area',''); vals=[]
+              vals.append('tokyo' if '/tokyo/' in url else 'chiba' if '/chiba/' in url else 'other')
+              if '錦糸町' in a: vals.append('kinshicho')
+              if '小岩' in a: vals.append('koiwa')
+              if any(x in a for x in ['渋谷','恵比寿','代官山','神泉','代々木八幡','代々木公園','代々木上原']): vals.append('shibuya-ebisu')
+              if any(x in a for x in ['八王子','東久留米','吉祥寺','立川','町田','多摩']): vals.append('tama')
+              return ' '.join(dict.fromkeys(vals))
+
+          def summary_for(item):
+              if item['name'] in old and old[item['name']]['summary']:
+                  return old[item['name']]['summary']
+              review=item.get('review',''); genre=item.get('genre','')
+              foods=[]
+              for word in dish_words:
+                  if word in review or word in genre: foods.append(word)
+                  if len(foods)==3: break
+              subject='、'.join(foods) if foods else (genre.split('、')[0] if genre else '料理')
+              result=subject+'を楽しんだ訪問記録です。'
+              notes=[]
+              if any(x in review for x in ['美味','おいし','絶品','満足','クオリティ','完成度']): notes.append('料理の味や満足度が好印象')
+              if any(x in review for x in ['店内','雰囲気','居心地','空間','綺麗','きれい']): notes.append('店内の雰囲気にも注目')
+              if any(x in review for x in ['接客','店員','スタッフ','サービス']): notes.append('接客やサービスについても紹介')
+              if notes: result+='口コミでは'+ '、'.join(notes[:2]) +'です。'
+              if any(x in review for x in ['混雑','満席','並び','行列','待ち']): result+='混雑する場合があるため、時間に余裕を持つと安心です。'
+              elif '予約' in review: result+='混み合う時間は予約も検討すると安心です。'
+              elif '現金' in review: result+='支払い方法は来店前に確認するのがおすすめです。'
+              else: result+='詳しいメニューや感想は食べログの投稿で確認できます。'
+              return result
+
+          cards=[]
+          for item in items:
+              name=item['name']; genre=item.get('genre',''); area=item.get('area','')
+              tags=[x.strip() for x in genre.split('、') if x.strip()][:3] or ['グルメ']
+              tags_html=''.join('<span>{}</span>'.format(escape(x)) for x in tags)
+              summary=summary_for(item)
+              actions=[]
+              saved=old.get(name,{})
+              if saved.get('local_href'):
+                  actions.append('<a class="local-link" href="{}">{}</a>'.format(escape(saved['local_href'],quote=True),escape(saved.get('local_text') or '詳しい記事')))
+              actions.append('<a class="external-link" href="{}" target="_blank" rel="noopener">食べログを見る</a>'.format(escape(item['url'],quote=True)))
+              insta=direct.get(name,profile)
+              insta_label='Instagram投稿を見る' if name in direct else 'Instagramを見る'
+              actions.append('<a class="instagram-link" href="{}" target="_blank" rel="noopener" aria-label="{}のInstagramを見る">{}</a>'.format(escape(insta,quote=True),escape(name,quote=True),insta_label))
+              search=' '.join([name,area,genre,summary])
+              first=name.strip()[0].upper() if name.strip() else '店'
+              budget=item.get('budget') or '予算は食べログで確認'
+              card='''        <article class="directory-card" data-area="{areas}" data-genre="{genres}" data-search="{search}">
+          <div class="directory-card-head"><span class="shop-initial">{initial}</span><div><h2>{name}</h2><p class="directory-meta">{area}｜{budget}</p></div></div><div class="directory-tags">{tags}</div><p class="review-summary">{summary}</p><div class="directory-actions">{actions}</div>
+        </article>'''.format(areas=filters_area(item),genres=filters_genre(genre),search=escape(search,quote=True),initial=escape(first),name=escape(name),area=escape(area),budget=escape(budget.replace('￥','')),tags=tags_html,summary=escape(summary),actions=''.join(actions))
+              cards.append(card)
+
+          begin=html.index('      <div class="directory-grid" id="directory-grid">')
+          finish=html.index('\n\n      <div class="empty-state"',begin)
+          grid='      <div class="directory-grid" id="directory-grid">\n'+'\n\n'.join(cards)+'\n      </div>'
+          html=html[:begin]+grid+html[finish:]
+          html=re.sub(r'<span id="result-count">\d+</span>店を表示','<span id="visible-count">20</span> / <span id="result-count">81</span>店を表示',html,count=1)
+          html=html.replace('      <div class="empty-state" id="empty-state">','      <button class="load-more" id="load-more" type="button">もっと見る</button>\n\n      <div class="empty-state" id="empty-state">',1)
+          if '.load-more{display:block' not in html:
+              html=html.replace('    .empty-state{display:none;','    .load-more{display:block;min-width:180px;margin:28px auto 0;padding:12px 24px;color:#38251d;background:#fff;border:2px solid #38251d;border-radius:999px;box-shadow:3px 4px 0 #38251d;font-weight:800;cursor:pointer}\n    .load-more[hidden]{display:none}\n    .empty-state{display:none;',1)
+
+          s=html.index("  <script>\n    const cards=",html.index('</footer>'))
+          e=html.index('  </script>',s)+len('  </script>')
+          js='''  <script>
+    const cards=[...document.querySelectorAll('.directory-card')];
+    const search=document.getElementById('shop-search');
+    const area=document.getElementById('area-filter');
+    const genre=document.getElementById('genre-filter');
+    const count=document.getElementById('result-count');
+    const visibleCount=document.getElementById('visible-count');
+    const empty=document.getElementById('empty-state');
+    const loadMore=document.getElementById('load-more');
+    const normalize=value=>value.toLowerCase().normalize('NFKC').replace(/\\s+/g,' ');
+    let displayLimit=20;
+    function applyFilters(reset=false){
+      if(reset) displayLimit=20;
+      const term=normalize(search.value.trim());
+      const matches=cards.filter(card=>(!term||normalize(card.dataset.search+' '+card.textContent).includes(term))&&(area.value==='all'||card.dataset.area.split(' ').includes(area.value))&&(genre.value==='all'||card.dataset.genre.split(' ').includes(genre.value)));
+      cards.forEach(card=>card.hidden=true);
+      matches.slice(0,displayLimit).forEach(card=>card.hidden=false);
+      const shown=Math.min(displayLimit,matches.length);
+      visibleCount.textContent=shown;
+      count.textContent=matches.length;
+      empty.classList.toggle('show',matches.length===0);
+      loadMore.hidden=shown>=matches.length;
+    }
+    const params=new URLSearchParams(location.search);
+    if([...area.options].some(option=>option.value===params.get('area'))) area.value=params.get('area');
+    if([...genre.options].some(option=>option.value===params.get('genre'))) genre.value=params.get('genre');
+    if(params.get('q')) search.value=params.get('q');
+    search.addEventListener('input',()=>applyFilters(true));
+    area.addEventListener('change',()=>applyFilters(true));
+    genre.addEventListener('change',()=>applyFilters(true));
+    loadMore.addEventListener('click',()=>{displayLimit+=20;applyFilters()});
+    document.getElementById('reset-filter').addEventListener('click',()=>{search.value='';area.value='all';genre.value='all';history.replaceState(null,'',location.pathname);applyFilters(true);search.focus()});
+    applyFilters();
+  </script>'''
+          p.write_text(html[:s]+js+html[e:],encoding='utf-8')
+          PY
+      - name: Validate and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(grep -o 'class="directory-card"' shops.html | wc -l | tr -d ' ')" = "81"
+          test "$(grep -o 'class="instagram-link"' shops.html | wc -l | tr -d ' ')" = "81"
+          grep -q 'id="result-count">81' shops.html
+          grep -q 'id="load-more"' shops.html
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add shops.html
+          git commit -m 'Publish all 81 visited restaurants'
+          git push
