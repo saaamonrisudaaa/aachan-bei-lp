@@ -1,0 +1,45 @@
+name: Verify live weekly hashtags
+on:
+  push:
+    paths:
+      - live-check-trigger.txt
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for live deployment
+        run: |
+          python - <<'PY'
+          import json, time, urllib.request
+          result = {'status': 'timeout', 'url': 'https://achanbay.com/'}
+          for attempt in range(1, 31):
+              url = f'https://achanbay.com/?weekly_check={int(time.time())}'
+              try:
+                  req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0', 'Cache-Control': 'no-cache'})
+                  with urllib.request.urlopen(req, timeout=20) as response:
+                      text = response.read().decode('utf-8', 'replace')
+                  checks = {
+                      'section': 'id="weekly-hashtag-list"' in text,
+                      'weekly_five': 'shuffled.slice(0, 5)' in text,
+                      'instagram_links': 'instagram.com/explore/tags/' in text,
+                      'monday_rotation': 'getDay() + 6' in text
+                  }
+                  if all(checks.values()):
+                      result = {'status': 'success', 'attempt': attempt, 'checks': checks, 'bytes': len(text), 'url': 'https://achanbay.com/'}
+                      break
+              except Exception as exc:
+                  result['last_error'] = str(exc)
+              time.sleep(10)
+          with open('live-hashtag-check.json', 'w', encoding='utf-8') as f:
+              json.dump(result, f, ensure_ascii=False, indent=2)
+          PY
+      - name: Publish result
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add live-hashtag-check.json
+          git commit -m "Add temporary live hashtag verification" || exit 0
+          git push
