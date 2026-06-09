@@ -15,34 +15,40 @@ jobs:
           python - <<'PY'
           import json, re, urllib.request, html
 
-          targets = [
-            'https://www.instagram.com/api/v1/users/web_profile_info/?username=ah_bei_gourmet',
-            'https://www.instagram.com/ah_bei_gourmet/?hl=ja',
-            'https://www.instagram.com/p/DVF73szEgc7/',
-            'https://www.instagram.com/p/DSfQDhMEr-1/',
-            'https://www.instagram.com/p/DWIi4IpkhTC/'
-          ]
+          shortcodes = ['DVF73szEgc7', 'DSfQDhMEr-1', 'DWIi4IpkhTC']
+          targets = ['https://www.instagram.com/ah_bei_gourmet/?hl=ja']
+          for code in shortcodes:
+            targets.extend([
+              f'https://www.instagram.com/p/{code}/embed/captioned/',
+              f'https://www.instagram.com/p/{code}/embed/',
+              f'https://www.instagram.com/p/{code}/'
+            ])
           results = []
           all_tags = []
-          pattern = re.compile(r'#[^\s#<>"\\]+')
+          tag_pattern = re.compile(r'#[A-Za-z0-9_\u3040-\u30ff\u3400-\u9fffー・]+')
+          meta_pattern = re.compile(r'<meta[^>]+(?:property|name)=["\'](?:og:description|description|twitter:description)["\'][^>]+content=["\'](.*?)["\']', re.I | re.S)
           for url in targets:
             req = urllib.request.Request(url, headers={
               'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/137 Safari/537.36',
-              'Accept-Language': 'ja,en-US;q=0.8,en;q=0.6',
-              'X-IG-App-ID': '936619743392459'
+              'Accept-Language': 'ja,en-US;q=0.8,en;q=0.6'
             })
             try:
               with urllib.request.urlopen(req, timeout=25) as response:
                 text = response.read().decode('utf-8', 'replace')
-                decoded = html.unescape(text).replace('\\u0023', '#').replace('\\n', '\n')
-                tags = pattern.findall(decoded)
-                clean = []
-                for tag in tags:
-                  tag = tag.rstrip('.,、。!！?？)]}」』\\')
-                  if 2 <= len(tag) <= 50 and tag not in clean:
-                    clean.append(tag)
-                all_tags.extend(clean)
-                results.append({'url': url, 'status': response.status, 'length': len(text), 'hashtags': clean[:100]})
+                decoded = html.unescape(text).replace('\\u0023', '#').replace('\\n', '\n').replace('\\"', '"')
+                tags = []
+                for tag in tag_pattern.findall(decoded):
+                  if re.fullmatch(r'#[0-9A-Fa-f]{3,8}', tag):
+                    continue
+                  if tag not in tags:
+                    tags.append(tag)
+                all_tags.extend(tags)
+                descriptions = [html.unescape(value)[:2000] for value in meta_pattern.findall(text)]
+                caption_samples = []
+                for match in re.findall(r'"(?:caption|text)"\s*:\s*"(.{1,2000}?)"', decoded, re.S):
+                  if '#' in match and match not in caption_samples:
+                    caption_samples.append(match)
+                results.append({'url': url, 'status': response.status, 'length': len(text), 'hashtags': tags[:100], 'descriptions': descriptions[:5], 'caption_samples': caption_samples[:5]})
             except Exception as exc:
               results.append({'url': url, 'error': str(exc)})
           unique = []
@@ -57,5 +63,5 @@ jobs:
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
           git add instagram-hashtags-diagnostic.json
-          git commit -m "Add temporary Instagram hashtag diagnostic" || exit 0
+          git commit -m "Update temporary Instagram hashtag diagnostic" || exit 0
           git push
