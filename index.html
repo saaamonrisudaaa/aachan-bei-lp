@@ -51,6 +51,20 @@
     @media(max-width:560px){.affiliate-feature{padding-top:42px}.affiliate-grid{gap:14px}.affiliate-card{display:flex;padding:14px}.affiliate-image-link{margin-bottom:12px}.affiliate-image-link img{max-height:220px}.affiliate-card h3{font-size:19px}}
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2339565086393570" crossorigin="anonymous"></script>
+
+  <style id="weekly-hashtag-style">
+    .weekly-hashtags{padding-top:18px;padding-bottom:64px}
+    .weekly-hashtags-card{display:grid;grid-template-columns:minmax(220px,.75fr) minmax(0,1.25fr);gap:32px;align-items:center;padding:28px;background:linear-gradient(135deg,#fff8df,#fff);border:2px solid #38251d;border-radius:18px;box-shadow:5px 6px 0 rgba(56,37,29,.86)}
+    .weekly-hashtags h2{font-size:clamp(28px,4vw,40px);line-height:1.35}
+    .weekly-hashtag-copy{margin-bottom:14px;color:#775d51;font-size:14px;line-height:1.7}
+    .weekly-hashtag-list{display:flex;flex-wrap:wrap;gap:10px;min-height:44px}
+    .weekly-hashtag-list a{display:inline-flex;align-items:center;min-height:42px;padding:8px 14px;color:#9f3f62;background:#fff1f5;border:1px solid #f0b6ca;border-radius:999px;font-size:14px;font-weight:800;text-decoration:none;transition:transform 160ms ease,background 160ms ease,box-shadow 160ms ease}
+    .weekly-hashtag-list a:hover,.weekly-hashtag-list a:focus-visible{background:#ffe3ed;box-shadow:0 5px 12px rgba(159,63,98,.14);transform:translateY(-2px)}
+    .weekly-hashtag-list a:focus-visible{outline:3px solid rgba(255,127,143,.35);outline-offset:2px}
+    .weekly-hashtag-note{display:block;margin-top:12px;color:#8a7064;font-size:12px}
+    @media(max-width:760px){.weekly-hashtags-card{grid-template-columns:1fr;gap:18px}}
+    @media(max-width:560px){.weekly-hashtags{padding:8px 16px 48px}.weekly-hashtags-card{padding:20px 16px;border-radius:14px}.weekly-hashtag-list{gap:8px}.weekly-hashtag-list a{min-height:38px;padding:7px 11px;font-size:12px}}
+  </style>
 </head>
 <body>
   <header class="site-header">
@@ -110,12 +124,51 @@
     <section class="split-section" id="areas"><div class="panel"><p class="section-kicker">Area</p><h2>エリアで探す</h2><div class="link-grid"><a href="./shops.html?area=tokyo">東京</a><a href="./shops.html?area=chiba">千葉</a><a href="./shops.html?area=kinshicho">錦糸町</a><a href="./shops.html?area=koiwa">小岩</a><a href="./shops.html?area=shibuya-ebisu">渋谷・恵比寿</a><a href="./shops.html?area=tama">多摩・西東京</a></div></div><div class="panel" id="genres"><p class="section-kicker">Genre</p><h2>ジャンルで探す</h2><div class="link-grid"><a href="./shops.html?genre=izakaya">居酒屋・バー</a><a href="./shops.html?genre=ramen">ラーメン</a><a href="./shops.html?genre=cafe">カフェ</a><a href="./shops.html?genre=chinese">中華・餃子</a><a href="./shops.html?genre=japanese">和食・寿司</a><a href="./shops.html?genre=other">その他</a></div></div></section>
 
     <section class="section" id="legal"><div class="section-head"><div><p class="section-kicker">Legal</p><h2>運営・広告表示</h2></div></div><div class="legal-grid"><article><h3>広告表記</h3><p>当サイトはアフィリエイト広告を利用しています。<a href="./privacy.html">詳しい表示はこちら</a></p></article><article><h3>免責事項</h3><p>価格、営業時間、メニューは変更される場合があります。来店前に公式情報をご確認ください。</p></article><article><h3>プライバシーポリシー</h3><p>アクセス解析、広告配信、Cookieの利用について記載しています。</p></article><article><h3>お問い合わせ</h3><p>掲載依頼、修正依頼、広告掲載の相談はInstagram DMで受け付けます。</p></article></div></section>
+
+    <section class="section weekly-hashtags" aria-labelledby="weekly-hashtag-title">
+      <div class="weekly-hashtags-card">
+        <div><p class="section-kicker">Weekly Hashtags</p><h2 id="weekly-hashtag-title">今週のハッシュタグ</h2></div>
+        <div><p class="weekly-hashtag-copy">Instagramの投稿で紹介しているエリアや料理から、今週のおすすめタグを5つ選びました。</p><div class="weekly-hashtag-list" id="weekly-hashtag-list" aria-live="polite"></div><small class="weekly-hashtag-note">毎週月曜日に5つのタグが自動で入れ替わります。</small></div>
+      </div>
+    </section>
   </main>
   <footer class="site-footer"><img src="https://www.rentracks.jp/adx/p.gifx?idx=0.73616.381246.2886.5868&amp;dna=82489" border="0" height="1" width="1" alt=""><img src="./assets/risu.jpg" alt="" class="footer-mark"><p>あーちゃんべいグルメ</p><a href="./privacy.html">運営者情報・プライバシーポリシー</a><small>&copy; 2026 Ah Bei Gourmet. All rights reserved.</small></footer>
   <script>
     const affiliateSection = document.getElementById('otoriyose');
     const legalSection = document.getElementById('legal');
     if (affiliateSection && legalSection) legalSection.before(affiliateSection);
+  </script>
+
+  <script id="weekly-hashtag-script">
+    (() => {
+      const hashtagPool = [
+        '東京グルメ','東京ランチ','東京ディナー','グルメ巡り','食べ歩き','グルメ好きな人と繋がりたい',
+        '東久留米グルメ','東久留米ランチ','町中華','中華料理','錦糸町グルメ','錦糸町ラーメン',
+        '家系ラーメン','ラーメン好きな人と繋がりたい','神田グルメ','神田ランチ','秋葉原グルメ',
+        '神田カフェ','東京カフェ','カフェ巡り','チーズケーキ','定食ランチ','東京居酒屋','あーちゃんべいグルメ'
+      ];
+      const list = document.getElementById('weekly-hashtag-list');
+      if (!list) return;
+      const today = new Date();
+      const monday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - ((today.getDay() + 6) % 7));
+      monday.setHours(0, 0, 0, 0);
+      let state = (Math.floor(monday.getTime() / 604800000) ^ 0x9e3779b9) >>> 0;
+      const shuffled = [...hashtagPool];
+      for (let i = shuffled.length - 1; i > 0; i -= 1) {
+        state = (Math.imul(state, 1664525) + 1013904223) >>> 0;
+        const j = state % (i + 1);
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      shuffled.slice(0, 5).forEach(tag => {
+        const link = document.createElement('a');
+        link.href = `https://www.instagram.com/explore/tags/${encodeURIComponent(tag)}/`;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.textContent = `#${tag}`;
+        link.setAttribute('aria-label', `Instagramでハッシュタグ ${tag} を見る`);
+        list.appendChild(link);
+      });
+    })();
   </script>
 </body>
 </html>
