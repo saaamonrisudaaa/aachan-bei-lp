@@ -1,10 +1,9 @@
 name: Strip image metadata
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/strip-image-metadata.yml"
+  workflow_dispatch:
+  schedule:
+    - cron: "*/5 * * * *"
 
 permissions:
   contents: write
