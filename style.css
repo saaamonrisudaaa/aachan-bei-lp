@@ -662,3 +662,19 @@ dd {
   font-size: clamp(26px, 3.2vw, 38px);
   white-space: nowrap;
 }
+
+/* Keep shop reviews first and place their Rakuten recommendation at the end. */
+.article-main:has(> .rakuten-pick) {
+  display: flex;
+  flex-direction: column;
+}
+
+.article-main:has(> .rakuten-pick) > .ad-label {
+  order: 98;
+  margin: 30px 0 18px;
+}
+
+.article-main:has(> .rakuten-pick) > .rakuten-pick {
+  order: 99;
+  margin-bottom: 0;
+}
