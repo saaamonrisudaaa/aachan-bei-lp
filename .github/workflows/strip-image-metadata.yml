@@ -2,18 +2,16 @@ name: Strip image metadata
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "*/5 * * * *"
-  issues:
-    types: [opened]
+  push:
+    branches: [main]
+    paths:
+      - ".metadata-cleanup-trigger"
 
 permissions:
   contents: write
-  issues: write
 
 jobs:
   strip-metadata:
-    if: github.event_name != 'issues' || github.event.issue.title == '[automation] strip image metadata'
     runs-on: ubuntu-latest
     steps:
       - name: Check out site
@@ -44,15 +42,9 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          rm -f .github/workflows/strip-image-metadata.yml
+          rm -f .metadata-cleanup-trigger .github/workflows/strip-image-metadata.yml
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add --all
           git commit -m "Remove metadata from published images"
           git push
-
-      - name: Close automation issue
-        if: github.event_name == 'issues'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh issue close "${{ github.event.issue.number }}" --repo "${{ github.repository }}"
