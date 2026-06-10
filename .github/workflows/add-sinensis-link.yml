@@ -1,0 +1,32 @@
+name: Add Sinensis detail link
+on:
+  push:
+    paths:
+      - sinensis-link-trigger.txt
+permissions:
+  contents: write
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Add detailed article link
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('shops.html')
+          text = path.read_text(encoding='utf-8')
+          old = "const localPages={'POT 東久留米店':'./pot-higashikurume.html','家家家 錦糸町店':'./yayaya-kinshicho.html','Sta. 神田':'./sta-kanda.html'};"
+          new = "const localPages={'POT 東久留米店':'./pot-higashikurume.html','家家家 錦糸町店':'./yayaya-kinshicho.html','Sta. 神田':'./sta-kanda.html','sinensis':'./sinensis-kichijoji.html'};"
+          if old not in text:
+              raise SystemExit('localPages definition was not found')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+      - name: Publish update
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add shops.html
+          git commit -m "Link Sinensis detailed article from directory"
+          git push
