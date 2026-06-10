@@ -1,0 +1,62 @@
+name: Test live shop filter
+on:
+  push:
+    paths:
+      - shop-filter-browser-trigger.txt
+permissions:
+  contents: write
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install browser
+        run: |
+          npm install playwright@1.52.0
+          npx playwright install --with-deps chromium
+      - name: Test ramen search
+        run: |
+          node <<'JS'
+          const fs = require('fs');
+          const { chromium } = require('playwright');
+          (async () => {
+            const browser = await chromium.launch({headless:true});
+            const page = await browser.newPage({viewport:{width:1465,height:768}});
+            const url = `https://achanbay.com/shops.html?browser_check=${Date.now()}`;
+            await page.goto(url,{waitUntil:'networkidle',timeout:120000});
+            await page.waitForFunction(() => document.querySelectorAll('.directory-card').length === 81,{timeout:60000});
+            await page.fill('#shop-search','ラーメン');
+            await page.click('#search-filter');
+            await page.waitForTimeout(300);
+            const result = await page.evaluate(() => {
+              const cards=[...document.querySelectorAll('.directory-card')];
+              const visible=cards.filter(card=>getComputedStyle(card).display!=='none');
+              const hidden=cards.filter(card=>getComputedStyle(card).display==='none');
+              return {
+                total:cards.length,
+                visible:visible.length,
+                hidden:hidden.length,
+                counter:document.querySelector('#result-count')?.textContent,
+                visibleNames:visible.map(card=>card.querySelector('h2')?.textContent.trim()),
+                visibleTextsContainRamen:visible.every(card=>card.textContent.includes('ラーメン')),
+                url:location.href
+              };
+            });
+            result.status = result.total===81 && result.visible>0 && result.visible<81 && result.hidden===81-result.visible && Number(result.counter)===result.visible && result.visibleTextsContainRamen ? 'success' : 'failure';
+            fs.writeFileSync('shop-filter-browser-check.json',JSON.stringify(result,null,2));
+            await page.screenshot({path:'shop-filter-browser-check.png',fullPage:false});
+            await browser.close();
+            if(result.status!=='success') process.exitCode=1;
+          })();
+          JS
+      - name: Publish result
+        if: always()
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add shop-filter-browser-check.json shop-filter-browser-check.png
+          git commit -m "Add temporary shop filter browser result" || exit 0
+          git push
