@@ -1,0 +1,53 @@
+name: Verify live shop search
+on:
+  push:
+    paths:
+      - shop-search-check-trigger.txt
+permissions:
+  contents: write
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Wait for live search update
+        run: |
+          python - <<'PY'
+          import json, time, urllib.request
+          result = {'status': 'timeout', 'url': 'https://achanbay.com/shops.html'}
+          for attempt in range(1, 31):
+              try:
+                  stamp = int(time.time())
+                  req = urllib.request.Request(f'https://achanbay.com/shops.html?search_check={stamp}', headers={'User-Agent':'Mozilla/5.0','Cache-Control':'no-cache'})
+                  with urllib.request.urlopen(req, timeout=20) as response:
+                      html = response.read().decode('utf-8', 'replace')
+                  with urllib.request.urlopen(f'https://achanbay.com/tabelog-all.json?search_check={stamp}', timeout=20) as response:
+                      data = json.loads(response.read().decode('utf-8'))
+                  shops = data.get('restaurants', [])
+                  tokyo = [shop for shop in shops if '/tokyo/' in shop.get('url','')]
+                  ramen = [shop for shop in shops if 'ラーメン' in (shop.get('name','') + shop.get('area','') + shop.get('genre','') + shop.get('review',''))]
+                  checks = {
+                      'search_button': 'id="search-filter"' in html and 'type="submit"' in html,
+                      'search_form': 'id="shop-filter-form"' in html,
+                      'submit_handler': "filterForm.addEventListener('submit'" in html,
+                      'mobile_layout': '@media(max-width:560px)' in html and '.search-filter,.reset-filter{min-height:48px}' in html,
+                      'restaurant_count': len(shops) == 81,
+                      'tokyo_filterable': 0 < len(tokyo) < len(shops),
+                      'ramen_filterable': 0 < len(ramen) < len(shops)
+                  }
+                  if all(checks.values()):
+                      result = {'status':'success','attempt':attempt,'checks':checks,'restaurant_count':len(shops),'tokyo_matches':len(tokyo),'ramen_matches':len(ramen),'url':'https://achanbay.com/shops.html'}
+                      break
+              except Exception as exc:
+                  result['last_error'] = str(exc)
+              time.sleep(10)
+          with open('shop-search-live-check.json','w',encoding='utf-8') as f:
+              json.dump(result,f,ensure_ascii=False,indent=2)
+          PY
+      - name: Publish verification
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add shop-search-live-check.json
+          git commit -m "Add temporary shop search verification" || exit 0
+          git push
