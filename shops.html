@@ -21,6 +21,14 @@
     .load-more{display:block;min-width:180px;margin:28px auto 0;padding:12px 24px;color:#38251d;background:#fff;border:2px solid #38251d;border-radius:999px;box-shadow:3px 4px 0 #38251d;font-weight:800;cursor:pointer}.load-more[hidden]{display:none}.empty-state{display:none;padding:54px 20px;color:#775d51;text-align:center;background:#fff;border:1px solid #ead8c7;border-radius:14px}.empty-state.show{display:block}.directory-disclaimer{margin:24px 0 0;padding:14px 16px;color:#775d51;background:#fff8ed;border:1px solid #edc9a8;border-radius:10px;font-size:12px}
     @media(max-width:760px){.filter-panel{position:static;grid-template-columns:1fr 1fr}.filter-field:first-child{grid-column:1/-1}.reset-filter{width:100%}.directory-grid{grid-template-columns:1fr}}
     @media(max-width:560px){.directory-hero{padding:36px 16px 18px}.directory-hero h1{font-size:34px}.directory-shell{padding:16px 16px 56px}.filter-panel{grid-template-columns:1fr;padding:13px}.filter-field:first-child{grid-column:auto}.directory-status{display:block}.directory-card{padding:16px}.directory-actions{display:grid;grid-template-columns:1fr 1fr}.directory-actions a{text-align:center}}
+
+    .filter-panel{grid-template-columns:minmax(240px,1.45fr) repeat(2,minmax(160px,.7fr)) auto auto}
+    .search-filter{align-self:end;min-height:46px;padding:9px 20px;color:#fff;background:#ff7f8f;border:2px solid #38251d;border-radius:999px;box-shadow:3px 4px 0 #38251d;font:inherit;font-weight:800;white-space:nowrap;cursor:pointer;transition:transform 150ms ease,box-shadow 150ms ease,background 150ms ease}
+    .search-filter:hover,.search-filter:focus-visible{background:#f4667a;transform:translateY(-1px);box-shadow:4px 5px 0 #38251d}
+    .search-filter:active{transform:translateY(2px);box-shadow:1px 2px 0 #38251d}
+    .search-filter:focus-visible,.reset-filter:focus-visible{outline:3px solid rgba(255,127,143,.32);outline-offset:3px}
+    @media(max-width:920px){.filter-panel{grid-template-columns:1fr 1fr}.filter-field:first-child{grid-column:1/-1}.search-filter,.reset-filter{width:100%}}
+    @media(max-width:560px){.filter-panel{grid-template-columns:1fr}.filter-field:first-child{grid-column:auto}.search-filter,.reset-filter{min-height:48px}}
   </style>
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2339565086393570" crossorigin="anonymous"></script>
 </head>
@@ -38,12 +46,13 @@
     </section>
     <section class="directory-shell" aria-labelledby="directory-title">
       <h2 id="directory-title" class="visually-hidden">訪問店一覧</h2>
-      <div class="filter-panel" aria-label="店舗の絞り込み">
+      <form class="filter-panel" id="shop-filter-form" aria-label="店舗の絞り込み">
         <label class="filter-field"><span>店名・エリアから検索</span><input id="shop-search" type="search" placeholder="例：ラーメン、錦糸町、寿司" autocomplete="off"></label>
         <label class="filter-field"><span>エリア</span><select id="area-filter"><option value="all">すべてのエリア</option><option value="tokyo">東京</option><option value="chiba">千葉</option><option value="other">その他のエリア</option><option value="kinshicho">錦糸町</option><option value="koiwa">小岩</option><option value="shibuya-ebisu">渋谷・恵比寿周辺</option><option value="tama">多摩・西東京</option></select></label>
         <label class="filter-field"><span>ジャンル</span><select id="genre-filter"><option value="all">すべてのジャンル</option><option value="izakaya">居酒屋・バー</option><option value="ramen">ラーメン</option><option value="cafe">カフェ・スイーツ</option><option value="chinese">中華・餃子</option><option value="japanese">和食・寿司</option><option value="other">その他</option></select></label>
-        <button class="reset-filter" id="reset-filter" type="button">条件をクリア</button>
-      </div>
+        <button class="search-filter" id="search-filter" type="submit" aria-controls="directory-grid">検索する</button>
+        <button class="reset-filter" id="reset-filter" type="button" aria-controls="directory-grid">条件をクリア</button>
+      </form>
       <div class="directory-status" aria-live="polite"><strong><span id="visible-count">0</span> / <span id="result-count">81</span>店を表示</strong><span>最初は20店舗を表示します</span></div>
       <div class="directory-grid" id="directory-grid" aria-live="polite"></div>
       <button class="load-more" id="load-more" type="button" hidden>もっと見る</button>
@@ -61,6 +70,7 @@
     };
     const localPages={'POT 東久留米店':'./pot-higashikurume.html','家家家 錦糸町店':'./yayaya-kinshicho.html','Sta. 神田':'./sta-kanda.html'};
     const dishWords=['ラーメン','つけ麺','餃子','炒飯','酢豚','角煮','麻婆豆腐','寿司','サーモン','刺身','海鮮','うなぎ','ひつまぶし','そば','うどん','天ぷら','唐揚げ','焼き鳥','おでん','とんかつ','カレー','ハンバーガー','タコス','パスタ','ピザ','ステーキ','焼肉','馬刺し','ビール','日本酒','コーヒー','ケーキ','パン','定食','杏仁豆腐','かき氷','ハンバーグ'];
+    const filterForm=document.getElementById('shop-filter-form');
     const grid=document.getElementById('directory-grid');
     const search=document.getElementById('shop-search');
     const area=document.getElementById('area-filter');
@@ -153,9 +163,16 @@
         resultCount.textContent='0';visibleCount.textContent='0';
       }
     }
-    search.addEventListener('input',()=>applyFilters(true));
-    area.addEventListener('change',()=>applyFilters(true));
-    genre.addEventListener('change',()=>applyFilters(true));
+    function updateFilterUrl(){
+      const params=new URLSearchParams();
+      const query=search.value.trim();
+      if(query) params.set('q',query);
+      if(area.value!=='all') params.set('area',area.value);
+      if(genre.value!=='all') params.set('genre',genre.value);
+      const suffix=params.toString();
+      history.replaceState(null,'',location.pathname+(suffix?'?'+suffix:''));
+    }
+    filterForm.addEventListener('submit',event=>{event.preventDefault();updateFilterUrl();applyFilters(true)});
     loadMore.addEventListener('click',()=>{displayLimit+=20;applyFilters()});
     document.getElementById('reset-filter').addEventListener('click',()=>{search.value='';area.value='all';genre.value='all';history.replaceState(null,'',location.pathname);applyFilters(true);search.focus()});
     initialize();
