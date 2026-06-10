@@ -1,0 +1,234 @@
+{
+  "checkedAt": "2026-06-10T01:31:07Z",
+  "live": {
+    "/": {
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 19764,
+      "sample": ""
+    },
+    "index.html": {
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 19764,
+      "sample": ""
+    },
+    "shops.html": {
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 17548,
+      "sample": ""
+    },
+    "privacy.html": {
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 2776,
+      "sample": ""
+    },
+    "pot-higashikurume.html": {
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 6146,
+      "sample": ""
+    },
+    "yayaya-kinshicho.html": {
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 6919,
+      "sample": ""
+    },
+    "sta-kanda.html": {
+      "status": 200,
+      "contentType": "text/html; charset=utf-8",
+      "bytes": 6158,
+      "sample": ""
+    },
+    "robots.txt": {
+      "error": "HTTP Error 404: Not Found"
+    },
+    "sitemap.xml": {
+      "error": "HTTP Error 404: Not Found"
+    },
+    "ads.txt": {
+      "status": 200,
+      "contentType": "text/plain; charset=utf-8",
+      "bytes": 59,
+      "sample": "google.com, pub-2339565086393570, DIRECT, f08c47fec0942fa0\n"
+    },
+    "404.html": {
+      "error": "HTTP Error 404: Not Found"
+    }
+  },
+  "pages": [
+    {
+      "file": "index.html",
+      "bytes": 23188,
+      "textChars": 1662,
+      "title": "あーちゃんべいグルメ | 東京・千葉のまた行きたいお店",
+      "description": "あーちゃんべいがInstagramで紹介した東京・千葉のグルメをランキング形式で紹介するサイトです。",
+      "h1Count": 1,
+      "h2Count": 7,
+      "images": 16,
+      "imagesMissingAlt": 0,
+      "canonical": false,
+      "openGraph": false,
+      "jsonLd": false,
+      "adsense": true,
+      "placeholderTerms": [],
+      "internalHtmlLinks": 18
+    },
+    {
+      "file": "pot-higashikurume.html",
+      "bytes": 8442,
+      "textChars": 1180,
+      "title": "POT東久留米 | あーちゃんべいグルメ",
+      "description": "東久留米の中華料理店POT東久留米を、あーちゃんべい目線で紹介。究極の酢豚、さんらーじゃん、アイス乗せ杏仁豆腐など、頼んだメニューや予算感をまとめています。",
+      "h1Count": 1,
+      "h2Count": 5,
+      "images": 5,
+      "imagesMissingAlt": 0,
+      "canonical": false,
+      "openGraph": false,
+      "jsonLd": false,
+      "adsense": true,
+      "placeholderTerms": [],
+      "internalHtmlLinks": 6
+    },
+    {
+      "file": "privacy.html",
+      "bytes": 4158,
+      "textChars": 805,
+      "title": "運営者情報・プライバシーポリシー | あーちゃんべいグルメ",
+      "description": "あーちゃんべいグルメの運営者情報、広告表記、免責事項、プライバシーポリシーです。",
+      "h1Count": 1,
+      "h2Count": 5,
+      "images": 2,
+      "imagesMissingAlt": 0,
+      "canonical": false,
+      "openGraph": false,
+      "jsonLd": false,
+      "adsense": true,
+      "placeholderTerms": [
+        "公開前に",
+        "準備中",
+        "差し替えてください"
+      ],
+      "internalHtmlLinks": 5
+    },
+    {
+      "file": "shop-template.html",
+      "bytes": 7189,
+      "textChars": 1433,
+      "title": "家家家 錦糸町店 | あーちゃんべいグルメ",
+      "description": "錦糸町の家系ラーメン、家家家 錦糸町店を紹介。固め・濃いめのラーメン、無料ライス、白髪ネギ、混雑状況や注文方法をまとめました。",
+      "h1Count": 1,
+      "h2Count": 6,
+      "images": 3,
+      "imagesMissingAlt": 0,
+      "canonical": false,
+      "openGraph": false,
+      "jsonLd": false,
+      "adsense": true,
+      "placeholderTerms": [],
+      "internalHtmlLinks": 6
+    },
+    {
+      "file": "shops.html",
+      "bytes": 19686,
+      "textChars": 517,
+      "title": "お店を探す | あーちゃんべいグルメ",
+      "description": "あーちゃんべいが訪問した81店舗を、エリア・ジャンル・店名で検索できます。口コミの要点を短くまとめた店舗一覧です。",
+      "h1Count": 1,
+      "h2Count": 2,
+      "images": 2,
+      "imagesMissingAlt": 0,
+      "canonical": false,
+      "openGraph": false,
+      "jsonLd": false,
+      "adsense": true,
+      "placeholderTerms": [],
+      "internalHtmlLinks": 5
+    },
+    {
+      "file": "sta-kanda.html",
+      "bytes": 8620,
+      "textChars": 1294,
+      "title": "Sta. 神田 | あーちゃんべいグルメ",
+      "description": "秋葉原駅から徒歩圏内のSta. 神田を訪問。唐揚げ定食や四角いチーズケーキ、待ち時間、店内の雰囲気を紹介します。",
+      "h1Count": 1,
+      "h2Count": 6,
+      "images": 4,
+      "imagesMissingAlt": 0,
+      "canonical": false,
+      "openGraph": false,
+      "jsonLd": false,
+      "adsense": true,
+      "placeholderTerms": [],
+      "internalHtmlLinks": 6
+    },
+    {
+      "file": "yayaya-kinshicho.html",
+      "bytes": 10129,
+      "textChars": 1639,
+      "title": "家家家 錦糸町店 | あーちゃんべいグルメ",
+      "description": "錦糸町の家系ラーメン、家家家 錦糸町店を紹介。固め・濃いめのラーメン、無料ライス、白髪ネギ、混雑状況や注文方法をまとめました。",
+      "h1Count": 1,
+      "h2Count": 7,
+      "images": 4,
+      "imagesMissingAlt": 0,
+      "canonical": false,
+      "openGraph": false,
+      "jsonLd": false,
+      "adsense": true,
+      "placeholderTerms": [],
+      "internalHtmlLinks": 6
+    }
+  ],
+  "largestAssets": [
+    {
+      "file": "assets/risu.jpg",
+      "bytes": 281535
+    },
+    {
+      "file": "assets/yayaya-kinshicho.jpg",
+      "bytes": 241882
+    },
+    {
+      "file": "assets/yayaya-kinshicho.jpg.jpeg",
+      "bytes": 241882
+    },
+    {
+      "file": "assets/pot-higashikurume-v2.jpg.jpeg",
+      "bytes": 150307
+    },
+    {
+      "file": "assets/sta.kanda.jpeg",
+      "bytes": 148717
+    },
+    {
+      "file": "assets/pot-ok.jpg",
+      "bytes": 115431
+    },
+    {
+      "file": "assets/POT東久留米.jpg",
+      "bytes": 112965
+    },
+    {
+      "file": "assets/pot-higashikurume-v2.jpg",
+      "bytes": 14482
+    },
+    {
+      "file": "assets/yayaya-kinshicho.svg",
+      "bytes": 8020
+    },
+    {
+      "file": "assets/pot-higashikurume.jpg",
+      "bytes": 6009
+    },
+    {
+      "file": "assets/sta-kanda.jpg",
+      "bytes": 2893
+    }
+  ],
+  "htmlPageCount": 7
+}
