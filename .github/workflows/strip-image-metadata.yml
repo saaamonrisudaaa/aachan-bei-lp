@@ -1,0 +1,49 @@
+name: Strip image metadata
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/strip-image-metadata.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  strip-metadata:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out site
+        uses: actions/checkout@v4
+
+      - name: Install image metadata tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick libimage-exiftool-perl
+
+      - name: Remove metadata from published images
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -d '' images < <(find . -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' \) -not -path './.git/*' -print0)
+
+          for image in "${images[@]}"; do
+            mogrify -auto-orient "$image"
+            exiftool -overwrite_original -all= "$image" >/dev/null
+          done
+
+          if exiftool -r -ext jpg -ext jpeg -ext png -gps:all -time:all -Make -Model . | grep -Eq 'GPS|Date/Time|Camera Model|Make'; then
+            echo "Sensitive image metadata still remains."
+            exit 1
+          fi
+
+      - name: Commit sanitized images
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/strip-image-metadata.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add --all
+          git commit -m "Remove metadata from published images"
+          git push
