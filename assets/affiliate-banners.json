@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "enabled": true,
+  "displayDelayMs": 1200,
+  "dismissHours": 24,
+  "selectionTtlHours": 6,
+  "personalization": {
+    "usePageCategory": true,
+    "useDevice": true,
+    "useTrafficSource": true,
+    "useVisitorType": true
+  },
+  "ads": [
+    {
+      "id": "house-instagram",
+      "active": true,
+      "asp": "house",
+      "sponsored": false,
+      "label": "おすすめ",
+      "title": "Instagramで最新グルメを見る",
+      "description": "東京・千葉を中心に、実際に訪れたお店を紹介しています。",
+      "imageUrl": "./assets/risu.jpg",
+      "destinationUrl": "https://www.instagram.com/ah_bei_gourmet/?hl=ja",
+      "cta": "投稿を見る",
+      "weight": 100,
+      "startAt": null,
+      "endAt": null,
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": ["*"],
+        "categories": ["all"],
+        "devices": ["all"],
+        "sources": ["all"],
+        "visitorTypes": ["all"]
+      }
+    }
+  ]
+}
