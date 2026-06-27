@@ -37,7 +37,11 @@
     if (/yayaya-kinshicho/.test(path)) return "ramen";
     if (/pot-higashikurume|sinensis-kichijoji/.test(path)) return "chinese";
     if (/sta-kanda/.test(path)) return "cafe";
-    if (/shops\.html/.test(path)) return "directory";
+    if (/genre-ramen\.html/.test(path)) return "ramen";
+    if (/genre-chinese\.html/.test(path)) return "chinese";
+    if (/genre-cafe\.html/.test(path)) return "cafe";
+    if (/genre-japanese\.html/.test(path)) return "japanese";
+    if (/area-|shops\.html/.test(path)) return "directory";
     if (path === "/" || /index\.html/.test(path)) return "home";
     return "article";
   }
@@ -99,19 +103,32 @@
       listMatches(target.visitorTypes, ctx.visitorType);
   }
 
-  function chooseAd(ads, ttlHours) {
+  function relevanceScore(ad, ctx) {
+    const target = ad.targeting || {};
+    let score = Number(ad.priority || 0);
+    if (asList(target.paths).length && !asList(target.paths).some(value => value === "*" || value === "all")) score += 40;
+    if (asList(target.categories).length && !asList(target.categories).includes("all")) score += 35;
+    if (asList(target.devices).length && !asList(target.devices).includes("all")) score += 15;
+    if (asList(target.sources).length && !asList(target.sources).includes("all")) score += 25;
+    if (asList(target.visitorTypes).length && !asList(target.visitorTypes).includes("all")) score += 10;
+    return score;
+  }
+
+  function chooseAd(ads, ttlHours, ctx) {
+    const bestScore = Math.max(...ads.map(ad => relevanceScore(ad, ctx)));
+    const candidates = ads.filter(ad => relevanceScore(ad, ctx) === bestScore);
     const storedId = storage.get("selected_id");
     const selectedAt = Number(storage.get("selected_at") || 0);
     const ttl = Math.max(0, Number(ttlHours || 0)) * 60 * 60 * 1000;
-    const stored = ads.find(ad => ad.id === storedId);
+    const stored = candidates.find(ad => ad.id === storedId);
     if (stored && (!ttl || now - selectedAt < ttl)) return stored;
 
-    const total = ads.reduce((sum, ad) => sum + Math.max(0, Number(ad.weight || 1)), 0);
-    let cursor = Math.random() * (total || ads.length);
-    const selected = ads.find(ad => {
+    const total = candidates.reduce((sum, ad) => sum + Math.max(0, Number(ad.weight || 1)), 0);
+    let cursor = Math.random() * (total || candidates.length);
+    const selected = candidates.find(ad => {
       cursor -= Math.max(0, Number(ad.weight || 1));
       return cursor <= 0;
-    }) || ads[0];
+    }) || candidates[0];
 
     storage.set("selected_id", selected.id);
     storage.set("selected_at", now);
@@ -220,6 +237,7 @@
     window.requestAnimationFrame(() => banner.classList.add("is-visible"));
 
     storage.set("impression_" + ad.id, now);
+    storage.set("global_impression", now);
     track("affiliate_banner_impression", ad, ctx);
   }
 
@@ -232,11 +250,15 @@
       const config = await response.json();
       if (!config.enabled || !Array.isArray(config.ads)) return;
 
+      const globalHours = Math.max(0, Number(config.globalFrequencyCapHours || 0));
+      const lastGlobalImpression = Number(storage.get("global_impression") || 0);
+      if (globalHours && lastGlobalImpression && now - lastGlobalImpression < globalHours * 60 * 60 * 1000) return;
+
       const ctx = context(config);
       const eligible = config.ads.filter(ad => isEligible(ad, ctx));
       if (!eligible.length) return;
 
-      const ad = chooseAd(eligible, config.selectionTtlHours);
+      const ad = chooseAd(eligible, config.selectionTtlHours, ctx);
       const delay = Math.max(0, Number(config.displayDelayMs || 0));
       window.setTimeout(() => render(ad, config, ctx), delay);
     } catch (error) {
