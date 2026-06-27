@@ -90,6 +90,7 @@
       </div>
     </section>
 
+      <div class="source-links" aria-label="エリア・ジャンルから探す"><a class="source-note" href="./area-tokyo.html">東京</a><a class="source-note" href="./area-kinshicho.html">錦糸町</a><a class="source-note" href="./area-koiwa.html">小岩</a><a class="source-note" href="./genre-ramen.html">ラーメン</a><a class="source-note" href="./genre-chinese.html">中華・餃子</a><a class="source-note" href="./genre-cafe.html">カフェ</a><a class="source-note" href="./genre-izakaya.html">居酒屋・バー</a></div>
     <section class="directory-shell" aria-labelledby="directory-title">
       <h2 id="directory-title">訪問店を検索</h2>
       <form class="filter-panel" id="shop-filter-form" aria-label="店舗の絞り込み">
@@ -103,7 +104,7 @@
       <div class="directory-grid" id="directory-grid"></div>
       <button class="load-more" id="load-more" type="button" hidden>もっと見る</button>
       <div class="empty-state" id="empty-state"><strong>条件に合うお店がありませんでした。</strong><br>検索語や絞り込み条件を変えてお試しください。</div>
-      <noscript><p class="directory-disclaimer">店舗検索にはJavaScriptを使用します。詳しい実食記事は上の4件から閲覧できます。また、食べログの訪問店一覧でも全店舗を確認できます。</p></noscript>
+      <noscript><p class="directory-disclaimer">店舗検索にはJavaScriptを使用します。詳しい実食記事はエリア・ジャンル別ページから閲覧できます。また、食べログの訪問店一覧でも全店舗を確認できます。</p></noscript>
       <p class="directory-disclaimer">掲載内容は訪問時の個人的な感想です。価格、営業時間、メニューなどは変更される場合があります。来店前に各店舗の公式情報をご確認ください。</p>
     </section>
   </main>
@@ -131,7 +132,7 @@
     const summary=value=>{const text=String(value??'').replace(/\s+/g,' ').trim();return text.length>145?text.slice(0,145)+'…':text||'訪問時の感想は食べログの投稿で確認できます。'};
     const region=item=>item.url.includes('/tokyo/')?'tokyo':item.url.includes('/chiba/')?'chiba':'other';
     function card(item){
-      const detail=localPages[item.name];
+      const detail=localPages[item.name]||item.detailUrl;
       const instagram=directInstagram[item.name]||profileUrl;
       return `<article class="directory-card"><div class="directory-card-head"><span class="shop-initial" aria-hidden="true">${esc(item.name.slice(0,1))}</span><div><h2>${esc(item.name)}</h2><p class="directory-meta">${esc(item.area)}${item.budget?'｜'+esc(item.budget):''}</p></div></div><div class="directory-tags"><span>${esc(item.genre)}</span>${item.visit?`<span>${esc(item.visit)}</span>`:''}</div><p class="review-summary">${esc(summary(item.review))}</p><div class="directory-actions">${detail?`<a class="local-link" href="${detail}">詳しい記事</a>`:''}<a class="external-link" href="${esc(item.url)}" target="_blank" rel="noopener noreferrer">食べログ</a><a class="instagram-link" href="${instagram}" target="_blank" rel="noopener noreferrer">Instagram</a></div></article>`;
     }
@@ -164,7 +165,7 @@
     document.getElementById('reset-filter').addEventListener('click',()=>{search.value='';area.value='all';genre.value='all';applyFilters();});
     loadMore.addEventListener('click',()=>{limit+=20;render();});
     fetch('./tabelog-all.json').then(response=>{if(!response.ok)throw new Error('店舗データを取得できませんでした');return response.json();}).then(data=>{
-      restaurants=Array.isArray(data.restaurants)?data.restaurants:[];
+      restaurants=Array.isArray(data.restaurants)?data.restaurants.map((item,index)=>({...item,detailUrl:localPages[item.name]||`./restaurant-${String(index+1).padStart(3,'0')}.html`})):[];
       const params=new URLSearchParams(location.search);
       search.value=params.get('q')||'';
       if(['tokyo','chiba','other'].includes(params.get('area')))area.value=params.get('area');
