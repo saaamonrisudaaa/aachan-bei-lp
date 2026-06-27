@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "enabled": true,
   "displayDelayMs": 1200,
   "dismissHours": 24,
@@ -12,26 +12,36 @@
   },
   "ads": [
     {
-      "id": "house-instagram",
+      "id": "rakuten-travel-main",
       "active": true,
-      "asp": "house",
-      "sponsored": false,
-      "label": "おすすめ",
-      "title": "Instagramで最新グルメを見る",
-      "description": "東京・千葉を中心に、実際に訪れたお店を紹介しています。",
-      "imageUrl": "./assets/risu.jpg",
-      "destinationUrl": "https://www.instagram.com/ah_bei_gourmet/?hl=ja",
-      "cta": "投稿を見る",
+      "asp": "rakuten-travel",
+      "sponsored": true,
+      "label": "PR",
+      "title": "楽天トラベルで宿泊プランを探す",
+      "description": "国内旅行のホテル・旅館・温泉宿を楽天トラベルで検索できます。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hsb/5547dfc6.546f7c0d.5547dfc7.ed412751/?me_id=2100001&me_adv_id=2762482&t=pict",
+      "destinationUrl": "https://hb.afl.rakuten.co.jp/hsc/5547dfc6.546f7c0d.5547dfc7.ed412751/?link_type=pict&ut=eyJwYWdlIjoic2hvcCIsInR5cGUiOiJwaWN0IiwiY29sIjoxLCJjYXQiOiIxIiwiYmFuIjoyNzYyNDgyLCJhbXAiOmZhbHNlfQ%3D%3D",
+      "cta": "楽天トラベルを見る",
       "weight": 100,
       "startAt": null,
       "endAt": null,
       "frequencyCapHours": 0,
       "targeting": {
-        "paths": ["*"],
-        "categories": ["all"],
-        "devices": ["all"],
-        "sources": ["all"],
-        "visitorTypes": ["all"]
+        "paths": [
+          "*"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "all"
+        ],
+        "sources": [
+          "all"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
       }
     }
   ]
