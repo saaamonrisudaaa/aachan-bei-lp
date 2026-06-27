@@ -253,7 +253,12 @@
           "mobile"
         ],
         "sources": [
-          "social"
+          "social",
+          "instagram",
+          "facebook",
+          "twitter",
+          "x",
+          "ig"
         ],
         "visitorTypes": [
           "all"
@@ -292,7 +297,12 @@
           "mobile"
         ],
         "sources": [
-          "social"
+          "social",
+          "instagram",
+          "facebook",
+          "twitter",
+          "x",
+          "ig"
         ],
         "visitorTypes": [
           "all"
@@ -331,7 +341,12 @@
           "mobile"
         ],
         "sources": [
-          "social"
+          "social",
+          "instagram",
+          "facebook",
+          "twitter",
+          "x",
+          "ig"
         ],
         "visitorTypes": [
           "all"
