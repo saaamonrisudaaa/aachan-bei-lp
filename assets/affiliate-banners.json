@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "enabled": true,
   "displayDelayMs": 2500,
   "dismissHours": 72,
@@ -319,6 +319,50 @@
       "description": "外出や旅行にも使いやすいカップ付きインナーです。",
       "imageUrl": "https://hbb.afl.rakuten.co.jp/hgb/554a4223.32d6e294.554a4224.78908be7/?me_id=1306289&item_id=10000736&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fradianne%2Fcabinet%2Fmg2%2Fsale%2F50off_cm26.jpg%3F_ex%3D240x240&s=240x240&t=picttext",
       "destinationUrl": "https://hb.afl.rakuten.co.jp/ichiba/554a4223.32d6e294.554a4224.78908be7/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fradianne%2Fcm00026%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",
+      "cta": "楽天市場で見る",
+      "priority": 70,
+      "weight": 20,
+      "startAt": null,
+      "endAt": null,
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": [
+          "/",
+          "/index.html",
+          "/shops.html",
+          "/area-*.html",
+          "/genre-other.html",
+          "/genre-izakaya.html"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "mobile"
+        ],
+        "sources": [
+          "social",
+          "instagram",
+          "facebook",
+          "twitter",
+          "x",
+          "ig"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
+      }
+    },
+    {
+      "id": "rakuten-accessory-storage",
+      "active": true,
+      "asp": "rakuten-market",
+      "sponsored": true,
+      "label": "PR",
+      "title": "見せるアクセサリー収納",
+      "description": "ネックレスなどを見やすく整理できる縦型・引き出し式のアクセサリーケースです。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hgb/5553e98e.6f309a6d.5553e98f.6a6d8cf4/?me_id=1439391&item_id=10030927&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fluckyrabbit%2Fcabinet%2F13150733%2Fp53077521%2Fimgrc0147734304.jpg%3F_ex%3D240x240&s=240x240&t=picttext",
+      "destinationUrl": "https://hb.afl.rakuten.co.jp/ichiba/5553e98e.6f309a6d.5553e98f.6a6d8cf4/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fluckyrabbit%2Fp260616113620883135%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",
       "cta": "楽天市場で見る",
       "priority": 70,
       "weight": 20,
