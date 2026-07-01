@@ -81,7 +81,46 @@
     @media(max-width:560px){.weekly-hashtags{padding:8px 16px 48px}.weekly-hashtags-card{padding:20px 16px;border-radius:14px}.weekly-hashtag-list{gap:8px}.weekly-hashtag-list a{min-height:38px;padding:7px 11px;font-size:12px}}
   </style>
   <script src="./assets/affiliate-banner.js?v=20260627" defer></script>
-</head>
+  <style id="ranking-clarity-style">
+    #ranking{padding:34px;background:linear-gradient(145deg,#fff8df 0%,#fff 58%,#fff1f5 100%);border:2px solid #38251d;border-radius:24px;box-shadow:7px 8px 0 rgba(56,37,29,.86)}
+    #ranking .ranking-overview{display:grid;grid-template-columns:minmax(280px,.8fr) minmax(0,1.2fr);gap:28px;align-items:end;margin-bottom:26px}
+    #ranking .ranking-updated{display:inline-flex;margin:0 0 10px;padding:5px 10px;background:#38251d;border-radius:999px;color:#fff;font-size:12px;font-weight:800}
+    #ranking .ranking-heading{margin:0;font-size:clamp(30px,4.5vw,52px);line-height:1.15;white-space:normal}
+    #ranking .ranking-lead{margin:0;color:#6f5448;font-size:15px;line-height:1.85}
+    #ranking .ranking-criteria{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+    #ranking .ranking-criteria span{padding:6px 10px;background:#fff;border:1px solid #d9c7b7;border-radius:999px;color:#51392f;font-size:12px;font-weight:800}
+    #ranking .cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;align-items:stretch}
+    #ranking .shop-card{display:flex;min-width:0;flex-direction:column;gap:0;padding:0;overflow:hidden;background:#fff;border-radius:18px;box-shadow:5px 6px 0 rgba(56,37,29,.82)}
+    #ranking .shop-card.rank-first{border-color:#b97a11}
+    #ranking .shop-card.rank-second{border-color:#727c89}
+    #ranking .shop-card.rank-third{border-color:#a65f36}
+    #ranking .ranking-photo{position:relative}
+    #ranking .shop-photo{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border:0;border-radius:0}
+    #ranking .rank{top:12px;left:12px;display:flex;width:auto;height:auto;min-width:74px;padding:8px 11px;gap:4px;background:#38251d;border-color:#fff;border-radius:999px;box-shadow:0 4px 12px rgba(0,0,0,.2);font-family:"Noto Sans JP",sans-serif;font-size:12px;line-height:1}
+    #ranking .rank strong{font-size:24px;line-height:.8}
+    #ranking .rank-first .rank{background:#b97a11}
+    #ranking .rank-second .rank{background:#727c89}
+    #ranking .rank-third .rank{background:#a65f36}
+    #ranking .ranking-category{position:absolute;right:12px;bottom:12px;padding:6px 10px;background:rgba(255,255,255,.94);border:1px solid #38251d;border-radius:999px;color:#38251d;font-size:11px;font-weight:800}
+    #ranking .shop-body{display:flex;flex:1;flex-direction:column;padding:20px}
+    #ranking .ranking-reason{margin:0 0 14px;padding:12px;background:#fff8df;border-left:5px solid #ff7f8f;border-radius:8px}
+    #ranking .ranking-reason strong{display:block;margin-bottom:4px;color:#9f3f62;font-size:12px}
+    #ranking .ranking-reason p{margin:0;color:#51392f;font-size:13px;line-height:1.65}
+    #ranking .tags{margin-bottom:10px}
+    #ranking .shop-body h3{margin:0 0 9px;font-size:24px;line-height:1.35}
+    #ranking .shop-summary{margin:0 0 14px;color:#72594e;font-size:14px;line-height:1.75}
+    #ranking .ranking-strengths{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:16px}
+    #ranking .ranking-strengths span{padding:5px 8px;background:#fff1f5;border:1px solid #f0b6ca;border-radius:6px;color:#8c3e5b;font-size:11px;font-weight:800}
+    #ranking dl{margin-top:auto}
+    #ranking dl div{display:grid;grid-template-columns:56px minmax(0,1fr);gap:8px;padding:8px 0;border-top:1px dashed #dccbc0}
+    #ranking dt{font-size:12px;font-weight:800}
+    #ranking dd{margin:0;font-size:13px;line-height:1.6}
+    #ranking .card-actions{display:grid;grid-template-columns:1fr 1fr;width:100%;gap:10px}
+    #ranking .card-actions a:first-child{background:#38251d;color:#fff}
+    #ranking .ranking-note{margin:18px 0 0;color:#7c655a;font-size:12px;line-height:1.7;text-align:right}
+    @media(max-width:980px){#ranking .cards{grid-template-columns:1fr}#ranking .shop-card{display:grid;grid-template-columns:minmax(220px,.72fr) minmax(0,1.28fr)}#ranking .ranking-photo{height:100%}#ranking .shop-photo{height:100%;aspect-ratio:auto}}
+    @media(max-width:680px){#ranking{margin-right:14px;margin-left:14px;padding:22px 14px;border-radius:18px}#ranking .ranking-overview{grid-template-columns:1fr;gap:14px}#ranking .ranking-heading{font-size:32px}#ranking .cards{gap:16px}#ranking .shop-card{display:flex}#ranking .shop-photo{height:auto;aspect-ratio:16/10}#ranking .shop-body{padding:16px}#ranking .card-actions{grid-template-columns:1fr 1fr}#ranking .ranking-note{text-align:left}}
+  </style></head>
 <body>
   <header class="site-header">
     <a class="brand" href="#top" aria-label="あーちゃんべいグルメ トップ"><img src="./assets/risu.jpg" alt="" class="brand-mark"><span>あーちゃんべいグルメ</span></a>
@@ -89,7 +128,7 @@
   </header>
   <main id="top">
     <section class="hero">
-      <div class="hero-copy"><p class="eyebrow">Tokyo / Chiba Gourmet Guide</p><h1><span>またいきたい”ご飯”を</span><span>あーちゃんべい目線で</span></h1><p class="lead">Instagramで紹介した東京・千葉のお店を、いいね数順のランキングと詳しいメモで探せるグルメページです。</p><div class="hero-actions"><a class="button primary" href="#ranking">人気のお店を見る</a><a class="button secondary" href="https://www.instagram.com/ah_bei_gourmet/" target="_blank" rel="noopener">Instagramへ</a></div></div>
+      <div class="hero-copy"><p class="eyebrow">Tokyo / Chiba Gourmet Guide</p><h1><span>またいきたい”ご飯”を</span><span>あーちゃんべい目線で</span></h1><p class="lead">Instagramで紹介した東京・千葉のお店を、実食ランキングと詳しい訪問メモから探せるグルメページです。</p><div class="hero-actions"><a class="button primary" href="#ranking">人気のお店を見る</a><a class="button secondary" href="https://www.instagram.com/ah_bei_gourmet/" target="_blank" rel="noopener">Instagramへ</a></div></div>
       <div class="hero-visual" aria-label="あーちゃんべいのキャラクター"><img src="./assets/risu.jpg" alt="フォークとスプーンを持ったリスのキャラクター"></div>
     </section>
 
@@ -102,13 +141,57 @@
       <div class="instagram-showcase"><div class="instagram-showcase-head"><p>写真だけでは伝えきれない雰囲気や、おすすめメニューを投稿写真と一緒に紹介します。</p><a class="instagram-profile-link" href="https://www.instagram.com/ah_bei_gourmet/?hl=ja" target="_blank" rel="noopener">@ah_bei_gourmetを見る</a></div><div class="instagram-reel" role="region" aria-label="あーちゃんべいのInstagram投稿"><div class="instagram-track"><div class="instagram-group"><a class="instagram-tile" href="https://www.instagram.com/ah_bei_gourmet/?hl=ja" target="_blank" rel="noopener" aria-label="POT東久留米の投稿を見る"><img src="./assets/pot-ok.jpg" alt="POT東久留米の料理"><span>POT東久留米</span></a><a class="instagram-tile" href="https://www.instagram.com/p/DSfQDhMEr-1/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener" aria-label="家家家 錦糸町店の投稿を見る"><img src="./assets/yayaya-kinshicho.jpg" alt="家家家 錦糸町店のラーメン"><span>家家家 錦糸町店</span></a><a class="instagram-tile" href="https://www.instagram.com/p/DVF73szEgc7/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener" aria-label="Sta. 神田の投稿を見る"><img src="./assets/sta.kanda.jpeg" alt="Sta. 神田のチーズケーキとドリンク"><span>Sta. 神田</span></a></div><div class="instagram-group" aria-hidden="true"><a class="instagram-tile" href="https://www.instagram.com/ah_bei_gourmet/?hl=ja" target="_blank" rel="noopener" tabindex="-1"><img src="./assets/pot-ok.jpg" alt=""><span>POT東久留米</span></a><a class="instagram-tile" href="https://www.instagram.com/p/DSfQDhMEr-1/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener" tabindex="-1"><img src="./assets/yayaya-kinshicho.jpg" alt=""><span>家家家 錦糸町店</span></a><a class="instagram-tile" href="https://www.instagram.com/p/DVF73szEgc7/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener" tabindex="-1"><img src="./assets/sta.kanda.jpeg" alt=""><span>Sta. 神田</span></a></div></div></div></div>
     </section>
 
-    <section class="section" id="ranking">
-      <div class="section-head"><div><p class="section-kicker">Ranking</p><h2 class="ranking-heading">勝手にランキング</h2></div><p>Instagramで紹介したお店を、いいね数や保存したくなるポイントをもとにまとめています。</p></div>
-      <div class="cards">
-        <article class="shop-card top-card"><div class="rank">1</div><img class="photo shop-photo" src="./assets/pot-ok.jpg" alt="POT東久留米の紹介画像"><div class="shop-body"><div class="tags"><span>#東京</span><span>#東久留米</span><span>#中華料理</span><span>いいね 101</span></div><h3>POT東久留米</h3><p>ミシュランビブグルマン出身シェフが手がける町中華。落ち着いた雰囲気で、しっかりおいしい中華を楽しみたい日にぴったりです。</p><dl><div><dt>予算</dt><dd>4,000円から5,000円</dd></div><div><dt>推し</dt><dd>究極の酢豚、さんらーじゃん、アイス乗せ杏仁豆腐</dd></div></dl><div class="card-actions"><a href="./pot-higashikurume.html">詳しく見る</a><a href="https://www.family-restaurant-pot.com/" target="_blank" rel="noopener">予約・詳細</a></div></div></article>
-        <article class="shop-card"><div class="rank">2</div><img class="photo shop-photo" src="./assets/yayaya-kinshicho.jpg" alt="錦糸町の家家家で食べたラーメン"><div class="shop-body"><div class="tags"><span>#東京</span><span>#錦糸町</span><span>#ラーメン</span></div><h3>家家家 錦糸町店</h3><p>錦糸町で楽しめる家系ラーメン。海苔、チャーシュー、ほうれん草がのった一杯を紹介します。</p><dl><div><dt>予算</dt><dd>1,000円から1,500円</dd></div><div><dt>ジャンル</dt><dd>家系ラーメン</dd></div></dl><div class="card-actions"><a href="./yayaya-kinshicho.html">詳しく見る</a><a href="https://www.instagram.com/p/DSfQDhMEr-1/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">予約・詳細</a></div></div></article>
-        <article class="shop-card"><div class="rank">3</div><img class="photo shop-photo" src="./assets/sta.kanda.jpeg" alt="神田のカフェのチーズケーキとアイスカフェラテ"><div class="shop-body"><div class="tags"><span>#東京</span><span>#神田</span><span>#カフェ</span><span>いいね 1,630</span></div><h3>Sta.</h3><p>万世橋駅跡の煉瓦造りの高架下を活かした、神田のレストラン・カフェ・バー。調理師や管理栄養士、フードスタイリストが日本の家庭料理にひと工夫を加え、調味料から丁寧に手づくりしています。</p><dl><div><dt>予算</dt><dd>1,500円から2,500円</dd></div><div><dt>推し</dt><dd>季節のケーキ、ラテ、窓側席</dd></div></dl><div class="card-actions"><a href="./sta-kanda.html">詳しく見る</a><a href="https://online-sta.com/" target="_blank" rel="noopener">予約・詳細</a></div></div></article>
+    <section class="section" id="ranking" aria-labelledby="ranking-title">
+      <div class="ranking-overview">
+        <div>
+          <p class="ranking-updated">2026年7月版</p>
+          <p class="section-kicker">Ah Bei's Best 3</p>
+          <h2 class="ranking-heading" id="ranking-title">また行きたい店<br>実食ベスト3</h2>
+        </div>
+        <div>
+          <p class="ranking-lead">運営者が実際に訪問したお店から、味、価格の納得感、店内の雰囲気、もう一度行きたいと思った度合いを総合して選びました。Instagramのいいね数だけで順位を決めていません。</p>
+          <div class="ranking-criteria" aria-label="ランキングの選定基準"><span>味・料理の満足度</span><span>価格の納得感</span><span>雰囲気・使いやすさ</span><span>また行きたい度</span></div>
+        </div>
       </div>
+      <div class="cards">
+        <article class="shop-card rank-first">
+          <div class="ranking-photo"><div class="rank" aria-label="総合1位"><span>総合</span><strong>1</strong><span>位</span></div><img class="photo shop-photo" src="./assets/pot-ok.jpg" alt="POT東久留米で味わった中華料理"><span class="ranking-category">町中華・ディナー</span></div>
+          <div class="shop-body">
+            <div class="ranking-reason"><strong>1位の理由</strong><p>料理の完成度と特別感が高く、複数人でいろいろな中華を楽しむ満足度が特に高かった一軒。</p></div>
+            <div class="tags"><span>#東京</span><span>#東久留米</span><span>#中華料理</span></div>
+            <h3>POT東久留米</h3>
+            <p class="shop-summary">親しみやすい町中華の雰囲気と、しっかり印象に残る料理を両方楽しめます。</p>
+            <div class="ranking-strengths"><span>料理の完成度</span><span>シェア向き</span><span>特別感</span></div>
+            <dl><div><dt>予算</dt><dd>4,000円から5,000円</dd></div><div><dt>推し</dt><dd>究極の酢豚、さんらーじゃん、アイス乗せ杏仁豆腐</dd></div></dl>
+            <div class="card-actions"><a href="./pot-higashikurume.html">実食レビュー</a><a href="https://www.family-restaurant-pot.com/" target="_blank" rel="noopener">公式・予約</a></div>
+          </div>
+        </article>
+        <article class="shop-card rank-second">
+          <div class="ranking-photo"><div class="rank" aria-label="総合2位"><span>総合</span><strong>2</strong><span>位</span></div><img class="photo shop-photo" src="./assets/yayaya-kinshicho.jpg" alt="家家家 錦糸町店の家系ラーメン"><span class="ranking-category">家系ラーメン</span></div>
+          <div class="shop-body">
+            <div class="ranking-reason"><strong>2位の理由</strong><p>濃厚な一杯、無料ライス、提供の早さがそろい、何度も通いたくなる安定感が魅力。</p></div>
+            <div class="tags"><span>#東京</span><span>#錦糸町</span><span>#ラーメン</span></div>
+            <h3>家家家 錦糸町店</h3>
+            <p class="shop-summary">固め・濃いめのラーメンと、スープを絡めた海苔で食べる無料ライスが相性抜群です。</p>
+            <div class="ranking-strengths"><span>リピート</span><span>コスパ</span><span>提供の早さ</span></div>
+            <dl><div><dt>予算</dt><dd>1,000円から1,500円</dd></div><div><dt>推し</dt><dd>白髪ネギ、無料ライス、海苔</dd></div></dl>
+            <div class="card-actions"><a href="./yayaya-kinshicho.html">実食レビュー</a><a href="https://www.instagram.com/p/DSfQDhMEr-1/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener">Instagram投稿</a></div>
+          </div>
+        </article>
+        <article class="shop-card rank-third">
+          <div class="ranking-photo"><div class="rank" aria-label="総合3位"><span>総合</span><strong>3</strong><span>位</span></div><img class="photo shop-photo" src="./assets/sta.kanda.jpeg" alt="Sta. 神田のチーズケーキとアイスカフェラテ"><span class="ranking-category">ランチ・カフェ</span></div>
+          <div class="shop-body">
+            <div class="ranking-reason"><strong>3位の理由</strong><p>彩り豊かな定食、洗練された空間、食後のチーズケーキまで一度に楽しめるバランスのよさ。</p></div>
+            <div class="tags"><span>#東京</span><span>#神田</span><span>#カフェ</span></div>
+            <h3>Sta. 神田</h3>
+            <p class="shop-summary">秋葉原駅から徒歩圏内。しっかり食事をしながら、デザートまでゆっくり楽しめます。</p>
+            <div class="ranking-strengths"><span>空間</span><span>彩り</span><span>ランチ利用</span></div>
+            <dl><div><dt>予算</dt><dd>1,500円から2,500円</dd></div><div><dt>推し</dt><dd>唐揚げ定食、四角いチーズケーキ</dd></div></dl>
+            <div class="card-actions"><a href="./sta-kanda.html">実食レビュー</a><a href="https://online-sta.com/" target="_blank" rel="noopener">公式・予約</a></div>
+          </div>
+        </article>
+      </div>
+      <p class="ranking-note">※順位は訪問時の個人的な体験をもとにした編集部独自の評価です。価格・メニュー・営業情報は変更される場合があります。</p>
     </section>
 
     <section class="split-section" id="areas"><div class="panel"><p class="section-kicker">Area</p><h2>エリアで探す</h2><div class="link-grid"><a href="./area-tokyo.html">東京</a><a href="./area-chiba.html">千葉</a><a href="./area-kinshicho.html">錦糸町</a><a href="./area-koiwa.html">小岩</a><a href="./area-shibuya-ebisu.html">渋谷・恵比寿</a><a href="./area-tama.html">多摩・西東京</a></div></div><div class="panel" id="genres"><p class="section-kicker">Genre</p><h2>ジャンルで探す</h2><div class="link-grid"><a href="./genre-izakaya.html">居酒屋・バー</a><a href="./genre-ramen.html">ラーメン</a><a href="./genre-cafe.html">カフェ</a><a href="./genre-chinese.html">中華・餃子</a><a href="./genre-japanese.html">和食・寿司</a><a href="./genre-other.html">その他</a></div></div></section>
