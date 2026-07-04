@@ -120,6 +120,18 @@
     #ranking .ranking-note{margin:18px 0 0;color:#7c655a;font-size:12px;line-height:1.7;text-align:right}
     @media(max-width:980px){#ranking .cards{grid-template-columns:1fr}#ranking .shop-card{display:grid;grid-template-columns:minmax(220px,.72fr) minmax(0,1.28fr)}#ranking .ranking-photo{height:100%}#ranking .shop-photo{height:100%;aspect-ratio:auto}}
     @media(max-width:680px){#ranking{margin-right:14px;margin-left:14px;padding:22px 14px;border-radius:18px}#ranking .ranking-overview{grid-template-columns:1fr;gap:14px}#ranking .ranking-heading{font-size:32px}#ranking .cards{gap:16px}#ranking .shop-card{display:flex}#ranking .shop-photo{height:auto;aspect-ratio:16/10}#ranking .shop-body{padding:16px}#ranking .card-actions{grid-template-columns:1fr 1fr}#ranking .ranking-note{text-align:left}}
+  </style>  <style id="instagram-embed-style">
+    .instagram-latest{padding-top:54px}
+    .instagram-latest .section-head{align-items:end}
+    .instagram-latest-copy{max-width:680px;color:#775d51;line-height:1.8}
+    .instagram-embed-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;align-items:start}
+    .instagram-embed-card{min-width:0;padding:12px;background:#fff;border:2px solid #38251d;border-radius:18px;box-shadow:5px 6px 0 rgba(56,37,29,.82)}
+    .instagram-embed-label{display:inline-flex;margin:0 0 10px;padding:5px 9px;background:#fff1f5;border:1px solid #f0b6ca;border-radius:999px;color:#9f3f62;font-size:11px;font-weight:800}
+    .instagram-embed-card .instagram-media{width:100%!important;min-width:0!important;max-width:none!important;margin:0!important;border:0!important}
+    .instagram-embed-fallback{display:flex;align-items:center;justify-content:center;min-height:220px;padding:24px;background:linear-gradient(135deg,#fff8df,#fff1f5);border-radius:12px;color:#38251d;font-weight:800;text-align:center;text-decoration:none}
+    .instagram-embed-note{margin:18px 0 0;color:#775d51;font-size:12px;line-height:1.7;text-align:center}
+    @media(max-width:980px){.instagram-embed-grid{grid-template-columns:1fr}.instagram-embed-card{max-width:560px;width:100%;margin:0 auto}}
+    @media(max-width:560px){.instagram-latest{padding-top:38px}.instagram-embed-card{padding:8px;border-radius:14px;box-shadow:3px 4px 0 rgba(56,37,29,.82)}}
   </style></head>
 <body>
   <header class="site-header">
@@ -133,12 +145,17 @@
     </section>
 
     <section class="notice" aria-label="サイトの掲載方針"><strong>実食レビューについて</strong><span>掲載店は運営者が実際に訪問し、料理・価格・混雑・雰囲気を訪問時点の体験からまとめています。</span></section>
-
-    
-
-    <section class="section intro">
-      <div><p class="section-kicker">About</p><h2 class="about-heading"><span>Instagramの投稿を</span><span>もっと詳しく</span></h2></div>
-      <div class="instagram-showcase"><div class="instagram-showcase-head"><p>写真だけでは伝えきれない雰囲気や、おすすめメニューを投稿写真と一緒に紹介します。</p><a class="instagram-profile-link" href="https://www.instagram.com/ah_bei_gourmet/?hl=ja" target="_blank" rel="noopener">@ah_bei_gourmetを見る</a></div><div class="instagram-reel" role="region" aria-label="あーちゃんべいのInstagram投稿"><div class="instagram-track"><div class="instagram-group"><a class="instagram-tile" href="https://www.instagram.com/ah_bei_gourmet/?hl=ja" target="_blank" rel="noopener" aria-label="POT東久留米の投稿を見る"><img src="./assets/pot-ok.jpg" alt="POT東久留米の料理"><span>POT東久留米</span></a><a class="instagram-tile" href="https://www.instagram.com/p/DSfQDhMEr-1/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener" aria-label="家家家 錦糸町店の投稿を見る"><img src="./assets/yayaya-kinshicho.jpg" alt="家家家 錦糸町店のラーメン"><span>家家家 錦糸町店</span></a><a class="instagram-tile" href="https://www.instagram.com/p/DVF73szEgc7/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener" aria-label="Sta. 神田の投稿を見る"><img src="./assets/sta.kanda.jpeg" alt="Sta. 神田のチーズケーキとドリンク"><span>Sta. 神田</span></a></div><div class="instagram-group" aria-hidden="true"><a class="instagram-tile" href="https://www.instagram.com/ah_bei_gourmet/?hl=ja" target="_blank" rel="noopener" tabindex="-1"><img src="./assets/pot-ok.jpg" alt=""><span>POT東久留米</span></a><a class="instagram-tile" href="https://www.instagram.com/p/DSfQDhMEr-1/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener" tabindex="-1"><img src="./assets/yayaya-kinshicho.jpg" alt=""><span>家家家 錦糸町店</span></a><a class="instagram-tile" href="https://www.instagram.com/p/DVF73szEgc7/?utm_source=ig_web_copy_link&amp;igsh=MzRlODBiNWFlZA==" target="_blank" rel="noopener" tabindex="-1"><img src="./assets/sta.kanda.jpeg" alt=""><span>Sta. 神田</span></a></div></div></div></div>
+    <section class="section instagram-latest" id="instagram-latest" aria-labelledby="instagram-latest-title">
+      <div class="section-head">
+        <div><p class="section-kicker">Latest on Instagram</p><h2 id="instagram-latest-title">Instagram<br>最新の店舗投稿</h2></div>
+        <div><p class="instagram-latest-copy">新しく紹介した店舗を、Instagramの投稿画像と本文そのままで表示します。画像はこのサイトへ保存せず、Instagramから直接読み込んでいます。</p><a class="instagram-profile-link" href="https://www.instagram.com/ah_bei_gourmet/?hl=ja" target="_blank" rel="noopener noreferrer">@ah_bei_gourmet を見る</a></div>
+      </div>
+      <div class="instagram-embed-grid">
+        <article class="instagram-embed-card"><span class="instagram-embed-label">最新投稿 01</span><blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DaWzYGJylmW/" data-instgrm-version="14"><a class="instagram-embed-fallback" href="https://www.instagram.com/reel/DaWzYGJylmW/" target="_blank" rel="noopener noreferrer">Instagramで最新の店舗投稿を見る</a></blockquote></article>
+        <article class="instagram-embed-card"><span class="instagram-embed-label">最新投稿 02</span><blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DaP-m04kniO/" data-instgrm-version="14"><a class="instagram-embed-fallback" href="https://www.instagram.com/p/DaP-m04kniO/" target="_blank" rel="noopener noreferrer">Instagramで店舗投稿を見る</a></blockquote></article>
+        <article class="instagram-embed-card"><span class="instagram-embed-label">最新投稿 03</span><blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/p/DZmhCmlklKJ/" data-instgrm-version="14"><a class="instagram-embed-fallback" href="https://www.instagram.com/p/DZmhCmlklKJ/" target="_blank" rel="noopener noreferrer">Instagramで店舗投稿を見る</a></blockquote></article>
+      </div>
+      <p class="instagram-embed-note">Instagramの読み込みを制限している環境では、投稿へのリンクが表示されます。</p>
     </section>
 
     <section class="section" id="ranking" aria-labelledby="ranking-title">
@@ -263,5 +280,6 @@
       });
     })();
   </script>
+  <script async src="https://www.instagram.com/embed.js"></script>
 </body>
 </html>
