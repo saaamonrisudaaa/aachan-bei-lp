@@ -1,0 +1,62 @@
+name: X auto post
+
+on:
+  schedule:
+    # 07:30, 15:30 and 19:30 Japan Standard Time (UTC+9)
+    - cron: "30 22 * * *"
+    - cron: "30 6 * * *"
+    - cron: "30 10 * * *"
+  workflow_dispatch:
+    inputs:
+      slot:
+        description: "Post time slot"
+        required: true
+        default: "auto"
+        type: choice
+        options:
+          - auto
+          - morning
+          - afternoon
+          - evening
+      dry_run:
+        description: "Preview only (do not publish)"
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+
+concurrency:
+  group: x-auto-post
+  cancel-in-progress: false
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      X_API_KEY: ${{ secrets.X_API_KEY }}
+      X_API_KEY_SECRET: ${{ secrets.X_API_KEY_SECRET }}
+      X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+      X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
+      SLOT: ${{ inputs.slot || 'auto' }}
+      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Build and publish post
+        shell: bash
+        run: |
+          args=(--slot "$SLOT")
+          if [[ "$DRY_RUN" == "true" ]]; then
+            args+=(--dry-run)
+          fi
+          python scripts/x_auto_post.py "${args[@]}"
