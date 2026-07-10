@@ -3,7 +3,7 @@
   "enabled": true,
   "displayDelayMs": 400,
   "dismissHours": 24,
-  "selectionTtlHours": 12,
+  "selectionTtlHours": 1,
   "globalFrequencyCapHours": 0,
   "personalization": {
     "usePageCategory": true,
