@@ -153,19 +153,16 @@
     const style = document.createElement("style");
     style.id = "achanbay-affiliate-banner-style";
     style.textContent = `
-      .achanbay-affiliate-banner{position:fixed;z-index:9998;right:16px;bottom:16px;left:16px;display:flex;max-width:760px;min-height:92px;margin:auto;align-items:center;gap:14px;padding:12px 52px 12px 12px;color:#38251d;background:rgba(255,250,243,.98);border:2px solid #38251d;border-radius:16px;box-shadow:6px 8px 0 rgba(56,37,29,.9),0 18px 42px rgba(56,37,29,.24);font-family:"Noto Sans JP",sans-serif;transform:translateY(calc(100% + 40px));opacity:0;transition:transform .3s ease,opacity .3s ease}
-      .achanbay-affiliate-banner.is-visible{transform:translateY(0);opacity:1}
-      .achanbay-affiliate-banner__image{display:block;flex:0 0 68px;width:68px;height:68px;object-fit:cover;background:#fff;border:1px solid #ead8c7;border-radius:12px}
-      .achanbay-affiliate-banner__body{min-width:0;flex:1}
-      .achanbay-affiliate-banner__label{display:inline-flex;margin-bottom:3px;padding:2px 7px;color:#8e294c;background:#ffe5ee;border-radius:999px;font-size:10px;font-weight:800}
-      .achanbay-affiliate-banner__title{display:block;margin:0;color:#38251d;font-size:16px;font-weight:800;line-height:1.4}
-      .achanbay-affiliate-banner__description{margin:3px 0 0;color:#775d51;font-size:12px;line-height:1.5}
-      .achanbay-affiliate-banner__cta{display:inline-flex;flex:0 0 auto;align-items:center;justify-content:center;min-height:42px;padding:8px 15px;color:#fff;background:#ff6f83;border:2px solid #38251d;border-radius:999px;box-shadow:2px 3px 0 #38251d;font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap}
-      .achanbay-affiliate-banner__cta:hover,.achanbay-affiliate-banner__cta:focus-visible{background:#f35670;transform:translateY(-1px)}
-      .achanbay-affiliate-banner__close{position:absolute;top:7px;right:8px;display:grid;width:34px;height:34px;padding:0;place-items:center;color:#38251d;background:#fff;border:1px solid #d9c6b8;border-radius:50%;font-size:22px;line-height:1;cursor:pointer}
-      body.achanbay-affiliate-banner-open{padding-bottom:124px}
-      @media(max-width:640px){.achanbay-affiliate-banner{right:8px;bottom:8px;left:8px;min-height:0;gap:10px;padding:10px 42px 10px 10px;border-radius:14px}.achanbay-affiliate-banner__image{flex-basis:54px;width:54px;height:54px}.achanbay-affiliate-banner__title{font-size:14px}.achanbay-affiliate-banner__description{display:none}.achanbay-affiliate-banner__cta{min-height:38px;padding:6px 10px;font-size:11px}body.achanbay-affiliate-banner-open{padding-bottom:108px}}
-      @media(prefers-reduced-motion:reduce){.achanbay-affiliate-banner{transition:none}}
+      .achanbay-affiliate-banner{position:relative;z-index:1;display:grid;grid-template-columns:76px minmax(0,1fr) auto;max-width:1120px;min-height:104px;margin:42px auto 26px;align-items:center;gap:16px;padding:16px 54px 16px 16px;color:#38251d;background:#fff8ed;border:1px solid #edc9a8;border-radius:18px;box-shadow:0 12px 30px rgba(89,54,28,.1);font-family:"Noto Sans JP",sans-serif;opacity:1}
+      .achanbay-affiliate-banner__image{display:block;width:76px;height:76px;object-fit:contain;background:#fff;border:1px solid #ead8c7;border-radius:12px}
+      .achanbay-affiliate-banner__body{min-width:0}
+      .achanbay-affiliate-banner__label{display:inline-flex;margin-bottom:4px;padding:2px 8px;color:#8e294c;background:#ffe5ee;border-radius:999px;font-size:10px;font-weight:800}
+      .achanbay-affiliate-banner__title{display:block;margin:0;color:#38251d;font-size:17px;font-weight:800;line-height:1.45}
+      .achanbay-affiliate-banner__description{margin:4px 0 0;color:#775d51;font-size:13px;line-height:1.6}
+      .achanbay-affiliate-banner__cta{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:9px 16px;color:#fff;background:#bf0000;border:2px solid #38251d;border-radius:999px;box-shadow:2px 3px 0 #38251d;font-size:13px;font-weight:800;text-decoration:none;white-space:nowrap}
+      .achanbay-affiliate-banner__cta:hover,.achanbay-affiliate-banner__cta:focus-visible{background:#a90000;transform:translateY(-1px)}
+      .achanbay-affiliate-banner__close{position:absolute;top:9px;right:10px;display:grid;width:32px;height:32px;padding:0;place-items:center;color:#38251d;background:#fff;border:1px solid #d9c6b8;border-radius:50%;font-size:20px;line-height:1;cursor:pointer}
+      @media(max-width:760px){.achanbay-affiliate-banner{grid-template-columns:58px minmax(0,1fr);margin:30px 12px 18px;gap:11px;padding:13px 42px 13px 13px}.achanbay-affiliate-banner__image{width:58px;height:58px}.achanbay-affiliate-banner__title{font-size:14px}.achanbay-affiliate-banner__description{font-size:11px}.achanbay-affiliate-banner__cta{grid-column:1/-1;width:100%;min-height:40px;font-size:12px}}
     `;
     document.head.appendChild(style);
   }
@@ -232,8 +229,9 @@
     });
 
     banner.append(body, link, close);
-    document.body.appendChild(banner);
-    document.body.classList.add("achanbay-affiliate-banner-open");
+    const footer = document.querySelector(".site-footer");
+    if (footer && footer.parentNode) footer.parentNode.insertBefore(banner, footer);
+    else document.body.appendChild(banner);
     window.requestAnimationFrame(() => banner.classList.add("is-visible"));
 
     storage.set("impression_" + ad.id, now);
