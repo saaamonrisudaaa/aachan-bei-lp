@@ -1,0 +1,50 @@
+name: Sync Instagram posts
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/instagram-sync.yml"
+      - "scripts/sync_instagram.py"
+  schedule:
+    # 09:15 Japan Standard Time
+    - cron: "15 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: instagram-sync
+  cancel-in-progress: true
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Fetch latest public Instagram posts
+        run: python scripts/sync_instagram.py
+
+      - name: Commit updated feed
+        shell: bash
+        run: |
+          git add assets/instagram-posts.json
+          if git diff --cached --quiet; then
+            echo "Instagram feed is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Update Instagram post feed"
+          git push
