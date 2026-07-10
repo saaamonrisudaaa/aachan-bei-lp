@@ -1,406 +1,410 @@
 {
-    "version":  6,
-    "enabled":  false,
-    "displayDelayMs":  2500,
-    "dismissHours":  72,
-    "selectionTtlHours":  24,
-    "globalFrequencyCapHours":  24,
-    "personalization":  {
-                            "usePageCategory":  true,
-                            "useDevice":  true,
-                            "useTrafficSource":  true,
-                            "useVisitorType":  true
-                        },
-    "ads":  [
-                {
-                    "id":  "rakuten-ramen",
-                    "active":  true,
-                    "asp":  "rakuten-market",
-                    "sponsored":  true,
-                    "label":  "PR",
-                    "title":  "家系ラーメンを自宅でも",
-                    "description":  "生麺と豚骨醤油スープの家系ラーメン3食セットです。",
-                    "imageUrl":  "https://hbb.afl.rakuten.co.jp/hgb/54a51975.ff69dbcc.54a51976.2b6d27d6/?me_id=1245288\u0026item_id=10004035\u0026pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fkumamoto-food%2Fcabinet%2Fitem%2Framen%2Fie%2Fr_iera001_01.jpg%3F_ex%3D240x240\u0026s=240x240\u0026t=picttext",
-                    "destinationUrl":  "https://a.r10.to/hFhhpl",
-                    "cta":  "楽天市場で見る",
-                    "priority":  100,
-                    "weight":  100,
-                    "startAt":  null,
-                    "endAt":  null,
-                    "frequencyCapHours":  0,
-                    "targeting":  {
-                                      "paths":  [
-                                                    "/genre-ramen.html",
-                                                    "/restaurant-007.html",
-                                                    "/yayaya-kinshicho.html",
-                                                    "/restaurant-021.html",
-                                                    "/restaurant-022.html",
-                                                    "/restaurant-040.html",
-                                                    "/restaurant-044.html",
-                                                    "/restaurant-051.html",
-                                                    "/restaurant-059.html",
-                                                    "/restaurant-066.html",
-                                                    "/restaurant-069.html"
-                                                ],
-                                      "categories":  [
-                                                         "all"
-                                                     ],
-                                      "devices":  [
-                                                      "all"
-                                                  ],
-                                      "sources":  [
-                                                      "all"
-                                                  ],
-                                      "visitorTypes":  [
-                                                           "all"
-                                                       ]
-                                  }
-                },
-                {
-                    "id":  "rakuten-chinese-set",
-                    "active":  true,
-                    "asp":  "rakuten-market",
-                    "sponsored":  true,
-                    "label":  "PR",
-                    "title":  "中華惣菜・点心セット",
-                    "description":  "豚まん、焼売、餃子など11種を楽しめる冷凍中華セットです。",
-                    "imageUrl":  "https://hbb.afl.rakuten.co.jp/hgb/54a53735.94b93d5f.54a53736.c1ec0d8c/?me_id=1401070\u0026item_id=10000196\u0026pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fy-daihanten%2Fcabinet%2F08775155%2Fss%2Fts-010-50p.jpg%3F_ex%3D300x300\u0026s=300x300\u0026t=picttext",
-                    "destinationUrl":  "https://a.r10.to/h544nj",
-                    "cta":  "楽天市場で見る",
-                    "priority":  100,
-                    "weight":  100,
-                    "startAt":  null,
-                    "endAt":  null,
-                    "frequencyCapHours":  0,
-                    "targeting":  {
-                                      "paths":  [
-                                                    "/genre-chinese.html",
-                                                    "/sinensis-kichijoji.html",
-                                                    "/pot-higashikurume.html",
-                                                    "/restaurant-018.html",
-                                                    "/restaurant-026.html",
-                                                    "/restaurant-064.html"
-                                                ],
-                                      "categories":  [
-                                                         "all"
-                                                     ],
-                                      "devices":  [
-                                                      "all"
-                                                  ],
-                                      "sources":  [
-                                                      "all"
-                                                  ],
-                                      "visitorTypes":  [
-                                                           "all"
-                                                       ]
-                                  }
-                },
-                {
-                    "id":  "rakuten-cheesecake",
-                    "active":  true,
-                    "asp":  "rakuten-market",
-                    "sponsored":  true,
-                    "label":  "PR",
-                    "title":  "濃厚バスク風チーズケーキ",
-                    "description":  "自宅のカフェタイムに楽しめる4号サイズの冷凍チーズケーキです。",
-                    "imageUrl":  "https://hbb.afl.rakuten.co.jp/hgb/54a53f65.317c9767.54a53f66.49659cda/?me_id=1419792\u0026item_id=10000000\u0026pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fkaruizawatorta%2Fcabinet%2F10215439%2Fimgrc0114448133.jpg%3F_ex%3D300x300\u0026s=300x300\u0026t=picttext",
-                    "destinationUrl":  "https://a.r10.to/hgHdZq",
-                    "cta":  "楽天市場で見る",
-                    "priority":  100,
-                    "weight":  100,
-                    "startAt":  null,
-                    "endAt":  null,
-                    "frequencyCapHours":  0,
-                    "targeting":  {
-                                      "paths":  [
-                                                    "/genre-cafe.html",
-                                                    "/restaurant-001.html",
-                                                    "/sta-kanda.html",
-                                                    "/restaurant-029.html",
-                                                    "/restaurant-031.html",
-                                                    "/restaurant-032.html",
-                                                    "/restaurant-041.html",
-                                                    "/restaurant-042.html",
-                                                    "/restaurant-046.html",
-                                                    "/restaurant-048.html",
-                                                    "/restaurant-053.html",
-                                                    "/restaurant-054.html",
-                                                    "/restaurant-056.html",
-                                                    "/restaurant-063.html",
-                                                    "/restaurant-065.html",
-                                                    "/restaurant-070.html",
-                                                    "/restaurant-073.html"
-                                                ],
-                                      "categories":  [
-                                                         "all"
-                                                     ],
-                                      "devices":  [
-                                                      "all"
-                                                  ],
-                                      "sources":  [
-                                                      "all"
-                                                  ],
-                                      "visitorTypes":  [
-                                                           "all"
-                                                       ]
-                                  }
-                },
-                {
-                    "id":  "rakuten-tonkatsu",
-                    "active":  true,
-                    "asp":  "rakuten-market",
-                    "sponsored":  true,
-                    "label":  "PR",
-                    "title":  "松のや ロースとんかつセット",
-                    "description":  "自宅で楽しめる冷凍ロースとんかつの大容量セットです。",
-                    "imageUrl":  "https://hbb.afl.rakuten.co.jp/hgb/554a428a.7e49dfb2.554a428b.16b1d185/?me_id=1425930\u0026item_id=10000012\u0026pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fmatsunoya%2Fcabinet%2F10501691%2Fimgrc0112833393.jpg%3F_ex%3D240x240\u0026s=240x240\u0026t=picttext",
-                    "destinationUrl":  "https://hb.afl.rakuten.co.jp/ichiba/554a428a.7e49dfb2.554a428b.16b1d185/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmatsunoya%2Fkatsu24%2F\u0026link_type=picttext\u0026ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",
-                    "cta":  "楽天市場で見る",
-                    "priority":  100,
-                    "weight":  100,
-                    "startAt":  null,
-                    "endAt":  null,
-                    "frequencyCapHours":  0,
-                    "targeting":  {
-                                      "paths":  [
-                                                    "/genre-japanese.html",
-                                                    "/restaurant-001.html",
-                                                    "/restaurant-062.html",
-                                                    "/restaurant-065.html"
-                                                ],
-                                      "categories":  [
-                                                         "all"
-                                                     ],
-                                      "devices":  [
-                                                      "all"
-                                                  ],
-                                      "sources":  [
-                                                      "all"
-                                                  ],
-                                      "visitorTypes":  [
-                                                           "all"
-                                                       ]
-                                  }
-                },
-                {
-                    "id":  "rakuten-travel-main",
-                    "active":  true,
-                    "asp":  "rakuten-travel",
-                    "sponsored":  true,
-                    "label":  "PR",
-                    "title":  "楽天トラベルで宿泊プランを探す",
-                    "description":  "国内旅行のホテル・旅館・温泉宿を楽天トラベルで検索できます。",
-                    "imageUrl":  "https://hbb.afl.rakuten.co.jp/hsb/5547dfc6.546f7c0d.5547dfc7.ed412751/?me_id=2100001\u0026me_adv_id=2762482\u0026t=pict",
-                    "destinationUrl":  "https://hb.afl.rakuten.co.jp/hsc/5547dfc6.546f7c0d.5547dfc7.ed412751/?link_type=pict\u0026ut=eyJwYWdlIjoic2hvcCIsInR5cGUiOiJwaWN0IiwiY29sIjoxLCJjYXQiOiIxIiwiYmFuIjoyNzYyNDgyLCJhbXAiOmZhbHNlfQ%3D%3D",
-                    "cta":  "楽天トラベルを見る",
-                    "priority":  50,
-                    "weight":  100,
-                    "startAt":  null,
-                    "endAt":  null,
-                    "frequencyCapHours":  0,
-                    "targeting":  {
-                                      "paths":  [
-                                                    "/",
-                                                    "/index.html",
-                                                    "/shops.html",
-                                                    "/area-*.html",
-                                                    "/genre-other.html",
-                                                    "/genre-izakaya.html"
-                                                ],
-                                      "categories":  [
-                                                         "all"
-                                                     ],
-                                      "devices":  [
-                                                      "all"
-                                                  ],
-                                      "sources":  [
-                                                      "all"
-                                                  ],
-                                      "visitorTypes":  [
-                                                           "all"
-                                                       ]
-                                  }
-                },
-                {
-                    "id":  "rakuten-parasol",
-                    "active":  true,
-                    "asp":  "rakuten-market",
-                    "sponsored":  true,
-                    "label":  "PR",
-                    "title":  "完全遮光・晴雨兼用の日傘",
-                    "description":  "外出時の紫外線・暑さ対策に使える軽量折りたたみ日傘です。",
-                    "imageUrl":  "https://hbb.afl.rakuten.co.jp/hgb/554a425a.4f542838.554a425b.428f702e/?me_id=1406417\u0026item_id=10000637\u0026pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fchakasho-dina%2Fcabinet%2F13168694%2Fimgrc0132529994.jpg%3F_ex%3D240x240\u0026s=240x240\u0026t=picttext",
-                    "destinationUrl":  "https://hb.afl.rakuten.co.jp/ichiba/554a425a.4f542838.554a425b.428f702e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fchakasho-dina%2F383yimiaorisan%2F\u0026link_type=picttext\u0026ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",
-                    "cta":  "楽天市場で見る",
-                    "priority":  70,
-                    "weight":  35,
-                    "startAt":  "2026-05-01T00:00:00+09:00",
-                    "endAt":  "2026-09-30T23:59:59+09:00",
-                    "frequencyCapHours":  0,
-                    "targeting":  {
-                                      "paths":  [
-                                                    "/",
-                                                    "/index.html",
-                                                    "/shops.html",
-                                                    "/area-*.html",
-                                                    "/genre-other.html",
-                                                    "/genre-izakaya.html"
-                                                ],
-                                      "categories":  [
-                                                         "all"
-                                                     ],
-                                      "devices":  [
-                                                      "mobile"
-                                                  ],
-                                      "sources":  [
-                                                      "social",
-                                                      "instagram",
-                                                      "facebook",
-                                                      "twitter",
-                                                      "x",
-                                                      "ig"
-                                                  ],
-                                      "visitorTypes":  [
-                                                           "all"
-                                                       ]
-                                  }
-                },
-                {
-                    "id":  "rakuten-summer-goods",
-                    "active":  true,
-                    "asp":  "rakuten-market",
-                    "sponsored":  true,
-                    "label":  "PR",
-                    "title":  "夏の暑さ対策グッズ",
-                    "description":  "ハンディファン、日傘、冷感グッズなどから選べる夏向けセットです。",
-                    "imageUrl":  "https://hbb.afl.rakuten.co.jp/hgb/554a4280.aa30b4a0.554a4281.8643c73a/?me_id=1386567\u0026item_id=10002004\u0026pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fcicibella-sports%2Fcabinet%2F12640583%2Fzhfd2025new%2Ftop1.jpg%3F_ex%3D240x240\u0026s=240x240\u0026t=picttext",
-                    "destinationUrl":  "https://hb.afl.rakuten.co.jp/ichiba/554a4280.aa30b4a0.554a4281.8643c73a/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcicibella-sports%2Fzhfd2025-f%2F\u0026link_type=picttext\u0026ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",
-                    "cta":  "楽天市場で見る",
-                    "priority":  70,
-                    "weight":  45,
-                    "startAt":  "2026-05-01T00:00:00+09:00",
-                    "endAt":  "2026-09-30T23:59:59+09:00",
-                    "frequencyCapHours":  0,
-                    "targeting":  {
-                                      "paths":  [
-                                                    "/",
-                                                    "/index.html",
-                                                    "/shops.html",
-                                                    "/area-*.html",
-                                                    "/genre-other.html",
-                                                    "/genre-izakaya.html"
-                                                ],
-                                      "categories":  [
-                                                         "all"
-                                                     ],
-                                      "devices":  [
-                                                      "mobile"
-                                                  ],
-                                      "sources":  [
-                                                      "social",
-                                                      "instagram",
-                                                      "facebook",
-                                                      "twitter",
-                                                      "x",
-                                                      "ig"
-                                                  ],
-                                      "visitorTypes":  [
-                                                           "all"
-                                                       ]
-                                  }
-                },
-                {
-                    "id":  "rakuten-bra-top",
-                    "active":  true,
-                    "asp":  "rakuten-market",
-                    "sponsored":  true,
-                    "label":  "PR",
-                    "title":  "カップ付きブラトップ",
-                    "description":  "外出や旅行にも使いやすいカップ付きインナーです。",
-                    "imageUrl":  "https://hbb.afl.rakuten.co.jp/hgb/554a4223.32d6e294.554a4224.78908be7/?me_id=1306289\u0026item_id=10000736\u0026pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fradianne%2Fcabinet%2Fmg2%2Fsale%2F50off_cm26.jpg%3F_ex%3D240x240\u0026s=240x240\u0026t=picttext",
-                    "destinationUrl":  "https://hb.afl.rakuten.co.jp/ichiba/554a4223.32d6e294.554a4224.78908be7/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fradianne%2Fcm00026%2F\u0026link_type=picttext\u0026ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",
-                    "cta":  "楽天市場で見る",
-                    "priority":  70,
-                    "weight":  20,
-                    "startAt":  null,
-                    "endAt":  null,
-                    "frequencyCapHours":  0,
-                    "targeting":  {
-                                      "paths":  [
-                                                    "/",
-                                                    "/index.html",
-                                                    "/shops.html",
-                                                    "/area-*.html",
-                                                    "/genre-other.html",
-                                                    "/genre-izakaya.html"
-                                                ],
-                                      "categories":  [
-                                                         "all"
-                                                     ],
-                                      "devices":  [
-                                                      "mobile"
-                                                  ],
-                                      "sources":  [
-                                                      "social",
-                                                      "instagram",
-                                                      "facebook",
-                                                      "twitter",
-                                                      "x",
-                                                      "ig"
-                                                  ],
-                                      "visitorTypes":  [
-                                                           "all"
-                                                       ]
-                                  }
-                },
-                {
-                    "id":  "rakuten-accessory-storage",
-                    "active":  true,
-                    "asp":  "rakuten-market",
-                    "sponsored":  true,
-                    "label":  "PR",
-                    "title":  "見せるアクセサリー収納",
-                    "description":  "ネックレスなどを見やすく整理できる縦型・引き出し式のアクセサリーケースです。",
-                    "imageUrl":  "https://hbb.afl.rakuten.co.jp/hgb/5553e98e.6f309a6d.5553e98f.6a6d8cf4/?me_id=1439391\u0026item_id=10030927\u0026pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fluckyrabbit%2Fcabinet%2F13150733%2Fp53077521%2Fimgrc0147734304.jpg%3F_ex%3D240x240\u0026s=240x240\u0026t=picttext",
-                    "destinationUrl":  "https://hb.afl.rakuten.co.jp/ichiba/5553e98e.6f309a6d.5553e98f.6a6d8cf4/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fluckyrabbit%2Fp260616113620883135%2F\u0026link_type=picttext\u0026ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",
-                    "cta":  "楽天市場で見る",
-                    "priority":  70,
-                    "weight":  20,
-                    "startAt":  null,
-                    "endAt":  null,
-                    "frequencyCapHours":  0,
-                    "targeting":  {
-                                      "paths":  [
-                                                    "/",
-                                                    "/index.html",
-                                                    "/shops.html",
-                                                    "/area-*.html",
-                                                    "/genre-other.html",
-                                                    "/genre-izakaya.html"
-                                                ],
-                                      "categories":  [
-                                                         "all"
-                                                     ],
-                                      "devices":  [
-                                                      "mobile"
-                                                  ],
-                                      "sources":  [
-                                                      "social",
-                                                      "instagram",
-                                                      "facebook",
-                                                      "twitter",
-                                                      "x",
-                                                      "ig"
-                                                  ],
-                                      "visitorTypes":  [
-                                                           "all"
-                                                       ]
-                                  }
-                }
-            ],
-    "reviewMode":  {
-                       "active":  true,
-                       "reason":  "Google AdSense low-value-content review",
-                       "updatedAt":  "2026-06-29"
-                   }
+  "version": 7,
+  "enabled": true,
+  "displayDelayMs": 400,
+  "dismissHours": 24,
+  "selectionTtlHours": 12,
+  "globalFrequencyCapHours": 0,
+  "personalization": {
+    "usePageCategory": true,
+    "useDevice": true,
+    "useTrafficSource": true,
+    "useVisitorType": true
+  },
+  "ads": [
+    {
+      "id": "rakuten-ramen",
+      "active": true,
+      "asp": "rakuten-market",
+      "sponsored": true,
+      "label": "PR",
+      "title": "家系ラーメンを自宅でも",
+      "description": "生麺と豚骨醤油スープの家系ラーメン3食セットです。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hgb/54a51975.ff69dbcc.54a51976.2b6d27d6/?me_id=1245288&item_id=10004035&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fkumamoto-food%2Fcabinet%2Fitem%2Framen%2Fie%2Fr_iera001_01.jpg%3F_ex%3D240x240&s=240x240&t=picttext",
+      "destinationUrl": "https://a.r10.to/hFhhpl",
+      "cta": "楽天市場で見る",
+      "priority": 100,
+      "weight": 100,
+      "startAt": null,
+      "endAt": null,
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": [
+          "/genre-ramen.html",
+          "/restaurant-007.html",
+          "/yayaya-kinshicho.html",
+          "/restaurant-021.html",
+          "/restaurant-022.html",
+          "/restaurant-040.html",
+          "/restaurant-044.html",
+          "/restaurant-051.html",
+          "/restaurant-059.html",
+          "/restaurant-066.html",
+          "/restaurant-069.html"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "all"
+        ],
+        "sources": [
+          "all"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
+      }
+    },
+    {
+      "id": "rakuten-chinese-set",
+      "active": true,
+      "asp": "rakuten-market",
+      "sponsored": true,
+      "label": "PR",
+      "title": "中華惣菜・点心セット",
+      "description": "豚まん、焼売、餃子など11種を楽しめる冷凍中華セットです。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hgb/54a53735.94b93d5f.54a53736.c1ec0d8c/?me_id=1401070&item_id=10000196&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fy-daihanten%2Fcabinet%2F08775155%2Fss%2Fts-010-50p.jpg%3F_ex%3D300x300&s=300x300&t=picttext",
+      "destinationUrl": "https://a.r10.to/h544nj",
+      "cta": "楽天市場で見る",
+      "priority": 100,
+      "weight": 100,
+      "startAt": null,
+      "endAt": null,
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": [
+          "/genre-chinese.html",
+          "/sinensis-kichijoji.html",
+          "/pot-higashikurume.html",
+          "/restaurant-018.html",
+          "/restaurant-026.html",
+          "/restaurant-064.html"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "all"
+        ],
+        "sources": [
+          "all"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
+      }
+    },
+    {
+      "id": "rakuten-cheesecake",
+      "active": true,
+      "asp": "rakuten-market",
+      "sponsored": true,
+      "label": "PR",
+      "title": "濃厚バスク風チーズケーキ",
+      "description": "自宅のカフェタイムに楽しめる4号サイズの冷凍チーズケーキです。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hgb/54a53f65.317c9767.54a53f66.49659cda/?me_id=1419792&item_id=10000000&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fkaruizawatorta%2Fcabinet%2F10215439%2Fimgrc0114448133.jpg%3F_ex%3D300x300&s=300x300&t=picttext",
+      "destinationUrl": "https://a.r10.to/hgHdZq",
+      "cta": "楽天市場で見る",
+      "priority": 100,
+      "weight": 100,
+      "startAt": null,
+      "endAt": null,
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": [
+          "/genre-cafe.html",
+          "/restaurant-001.html",
+          "/sta-kanda.html",
+          "/restaurant-029.html",
+          "/restaurant-031.html",
+          "/restaurant-032.html",
+          "/restaurant-041.html",
+          "/restaurant-042.html",
+          "/restaurant-046.html",
+          "/restaurant-048.html",
+          "/restaurant-053.html",
+          "/restaurant-054.html",
+          "/restaurant-056.html",
+          "/restaurant-063.html",
+          "/restaurant-065.html",
+          "/restaurant-070.html",
+          "/restaurant-073.html"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "all"
+        ],
+        "sources": [
+          "all"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
+      }
+    },
+    {
+      "id": "rakuten-tonkatsu",
+      "active": true,
+      "asp": "rakuten-market",
+      "sponsored": true,
+      "label": "PR",
+      "title": "松のや ロースとんかつセット",
+      "description": "自宅で楽しめる冷凍ロースとんかつの大容量セットです。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hgb/554a428a.7e49dfb2.554a428b.16b1d185/?me_id=1425930&item_id=10000012&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fmatsunoya%2Fcabinet%2F10501691%2Fimgrc0112833393.jpg%3F_ex%3D240x240&s=240x240&t=picttext",
+      "destinationUrl": "https://hb.afl.rakuten.co.jp/ichiba/554a428a.7e49dfb2.554a428b.16b1d185/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fmatsunoya%2Fkatsu24%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",
+      "cta": "楽天市場で見る",
+      "priority": 100,
+      "weight": 100,
+      "startAt": null,
+      "endAt": null,
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": [
+          "/genre-japanese.html",
+          "/restaurant-001.html",
+          "/restaurant-062.html",
+          "/restaurant-065.html"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "all"
+        ],
+        "sources": [
+          "all"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
+      }
+    },
+    {
+      "id": "rakuten-travel-main",
+      "active": true,
+      "asp": "rakuten-travel",
+      "sponsored": true,
+      "label": "PR",
+      "title": "楽天トラベルで宿泊プランを探す",
+      "description": "国内旅行のホテル・旅館・温泉宿を楽天トラベルで検索できます。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hsb/5547dfc6.546f7c0d.5547dfc7.ed412751/?me_id=2100001&me_adv_id=2762482&t=pict",
+      "destinationUrl": "https://hb.afl.rakuten.co.jp/hsc/5547dfc6.546f7c0d.5547dfc7.ed412751/?link_type=pict&ut=eyJwYWdlIjoic2hvcCIsInR5cGUiOiJwaWN0IiwiY29sIjoxLCJjYXQiOiIxIiwiYmFuIjoyNzYyNDgyLCJhbXAiOmZhbHNlfQ%3D%3D",
+      "cta": "楽天トラベルを見る",
+      "priority": 50,
+      "weight": 100,
+      "startAt": null,
+      "endAt": null,
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": [
+          "/",
+          "/index.html",
+          "/shops.html",
+          "/area-*.html",
+          "/genre-*.html",
+          "/restaurant-*.html",
+          "/pot-higashikurume.html",
+          "/yayaya-kinshicho.html",
+          "/sta-kanda.html",
+          "/sinensis-kichijoji.html"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "all"
+        ],
+        "sources": [
+          "all"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
+      }
+    },
+    {
+      "id": "rakuten-parasol",
+      "active": false,
+      "asp": "rakuten-market",
+      "sponsored": true,
+      "label": "PR",
+      "title": "完全遮光・晴雨兼用の日傘",
+      "description": "外出時の紫外線・暑さ対策に使える軽量折りたたみ日傘です。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hgb/554a425a.4f542838.554a425b.428f702e/?me_id=1406417&item_id=10000637&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fchakasho-dina%2Fcabinet%2F13168694%2Fimgrc0132529994.jpg%3F_ex%3D240x240&s=240x240&t=picttext",
+      "destinationUrl": "https://hb.afl.rakuten.co.jp/ichiba/554a425a.4f542838.554a425b.428f702e/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fchakasho-dina%2F383yimiaorisan%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",
+      "cta": "楽天市場で見る",
+      "priority": 70,
+      "weight": 35,
+      "startAt": "2026-05-01T00:00:00+09:00",
+      "endAt": "2026-09-30T23:59:59+09:00",
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": [
+          "/",
+          "/index.html",
+          "/shops.html",
+          "/area-*.html",
+          "/genre-other.html",
+          "/genre-izakaya.html"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "mobile"
+        ],
+        "sources": [
+          "social",
+          "instagram",
+          "facebook",
+          "twitter",
+          "x",
+          "ig"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
+      }
+    },
+    {
+      "id": "rakuten-summer-goods",
+      "active": false,
+      "asp": "rakuten-market",
+      "sponsored": true,
+      "label": "PR",
+      "title": "夏の暑さ対策グッズ",
+      "description": "ハンディファン、日傘、冷感グッズなどから選べる夏向けセットです。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hgb/554a4280.aa30b4a0.554a4281.8643c73a/?me_id=1386567&item_id=10002004&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fcicibella-sports%2Fcabinet%2F12640583%2Fzhfd2025new%2Ftop1.jpg%3F_ex%3D240x240&s=240x240&t=picttext",
+      "destinationUrl": "https://hb.afl.rakuten.co.jp/ichiba/554a4280.aa30b4a0.554a4281.8643c73a/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fcicibella-sports%2Fzhfd2025-f%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",
+      "cta": "楽天市場で見る",
+      "priority": 70,
+      "weight": 45,
+      "startAt": "2026-05-01T00:00:00+09:00",
+      "endAt": "2026-09-30T23:59:59+09:00",
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": [
+          "/",
+          "/index.html",
+          "/shops.html",
+          "/area-*.html",
+          "/genre-other.html",
+          "/genre-izakaya.html"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "mobile"
+        ],
+        "sources": [
+          "social",
+          "instagram",
+          "facebook",
+          "twitter",
+          "x",
+          "ig"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
+      }
+    },
+    {
+      "id": "rakuten-bra-top",
+      "active": false,
+      "asp": "rakuten-market",
+      "sponsored": true,
+      "label": "PR",
+      "title": "カップ付きブラトップ",
+      "description": "外出や旅行にも使いやすいカップ付きインナーです。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hgb/554a4223.32d6e294.554a4224.78908be7/?me_id=1306289&item_id=10000736&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fradianne%2Fcabinet%2Fmg2%2Fsale%2F50off_cm26.jpg%3F_ex%3D240x240&s=240x240&t=picttext",
+      "destinationUrl": "https://hb.afl.rakuten.co.jp/ichiba/554a4223.32d6e294.554a4224.78908be7/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fradianne%2Fcm00026%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",
+      "cta": "楽天市場で見る",
+      "priority": 70,
+      "weight": 20,
+      "startAt": null,
+      "endAt": null,
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": [
+          "/",
+          "/index.html",
+          "/shops.html",
+          "/area-*.html",
+          "/genre-other.html",
+          "/genre-izakaya.html"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "mobile"
+        ],
+        "sources": [
+          "social",
+          "instagram",
+          "facebook",
+          "twitter",
+          "x",
+          "ig"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
+      }
+    },
+    {
+      "id": "rakuten-accessory-storage",
+      "active": false,
+      "asp": "rakuten-market",
+      "sponsored": true,
+      "label": "PR",
+      "title": "見せるアクセサリー収納",
+      "description": "ネックレスなどを見やすく整理できる縦型・引き出し式のアクセサリーケースです。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hgb/5553e98e.6f309a6d.5553e98f.6a6d8cf4/?me_id=1439391&item_id=10030927&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fluckyrabbit%2Fcabinet%2F13150733%2Fp53077521%2Fimgrc0147734304.jpg%3F_ex%3D240x240&s=240x240&t=picttext",
+      "destinationUrl": "https://hb.afl.rakuten.co.jp/ichiba/5553e98e.6f309a6d.5553e98f.6a6d8cf4/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fluckyrabbit%2Fp260616113620883135%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",
+      "cta": "楽天市場で見る",
+      "priority": 70,
+      "weight": 20,
+      "startAt": null,
+      "endAt": null,
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": [
+          "/",
+          "/index.html",
+          "/shops.html",
+          "/area-*.html",
+          "/genre-other.html",
+          "/genre-izakaya.html"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "mobile"
+        ],
+        "sources": [
+          "social",
+          "instagram",
+          "facebook",
+          "twitter",
+          "x",
+          "ig"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
+      }
+    }
+  ],
+  "reviewMode": {
+    "active": false,
+    "reason": "Rakuten affiliate display restored",
+    "updatedAt": "2026-07-10"
+  }
 }
