@@ -1,5 +1,5 @@
 {
-  "version": 7,
+  "version": 8,
   "enabled": true,
   "displayDelayMs": 400,
   "dismissHours": 24,
@@ -400,11 +400,167 @@
           "all"
         ]
       }
+    },
+    {
+      "id": "rakuten-sanrio-shop",
+      "active": true,
+      "asp": "rakuten-market",
+      "sponsored": true,
+      "label": "PR",
+      "title": "サンリオ公式楽天市場店",
+      "description": "キャラクターグッズやギフトをサンリオ公式ショップで探せます。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hlb/5599358c.6687774a.5547dfc7.ed412751/?sid=1&shop=sanrio&size=1&kind=1&me_id=1200352&me_adv_id=2229&t=pict",
+      "destinationUrl": "https://hb.afl.rakuten.co.jp/hgc/5599358c.6687774a.5547dfc7.ed412751/?pc=http%3A%2F%2Fwww.rakuten.co.jp%2Fsanrio%2F&link_type=pict&ut=eyJwYWdlIjoic2hvcCIsInR5cGUiOiJwaWN0IiwiY29sIjoxLCJjYXQiOjEsImJhbiI6MjIyOSwiYW1wIjpmYWxzZX0%3D",
+      "cta": "ショップを見る",
+      "priority": 50,
+      "weight": 70,
+      "startAt": null,
+      "endAt": null,
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": [
+          "/",
+          "/index.html",
+          "/shops.html",
+          "/area-*.html",
+          "/genre-other.html",
+          "/genre-izakaya.html"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "all"
+        ],
+        "sources": [
+          "all"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
+      }
+    },
+    {
+      "id": "rakuten-body-mist",
+      "active": true,
+      "asp": "rakuten-market",
+      "sponsored": true,
+      "label": "PR",
+      "title": "WHITH WHITE ボディミスト",
+      "description": "外出前や食後の身だしなみに使いやすい日本製フレグランスミストです。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hgb/559934a0.9f5dc99a.559934a1.2ac15d88/?me_id=1379793&item_id=10000217&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fwhithwhite%2Fcabinet%2Fsalesamune%2F20260704m%2F906b0bf4ww33g-50.jpg%3F_ex%3D240x240&s=240x240&t=picttext",
+      "destinationUrl": "https://hb.afl.rakuten.co.jp/ichiba/559934a0.9f5dc99a.559934a1.2ac15d88/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fwhithwhite%2F906b0bf4ww33g%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",
+      "cta": "楽天市場で見る",
+      "priority": 50,
+      "weight": 50,
+      "startAt": null,
+      "endAt": null,
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": [
+          "/",
+          "/index.html",
+          "/shops.html",
+          "/area-*.html",
+          "/genre-other.html",
+          "/genre-izakaya.html"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "all"
+        ],
+        "sources": [
+          "all"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
+      }
+    },
+    {
+      "id": "rakuten-roomwear",
+      "active": true,
+      "asp": "rakuten-market",
+      "sponsored": true,
+      "label": "PR",
+      "title": "さらてろリブ ルームウェア",
+      "description": "冷感素材の上下セット。自宅時間や旅行先でも使いやすいルームウェアです。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hgb/55666347.2df3b624.55666348.878f185b/?me_id=1224379&item_id=10036035&pc=https%3A%2F%2Fthumbnail.image.rakuten.co.jp%2F%400_mall%2Fdarkangel%2Fcabinet%2F12863863%2F13534266%2F1114-main-260707.jpg%3F_ex%3D240x240&s=240x240&t=picttext",
+      "destinationUrl": "https://hb.afl.rakuten.co.jp/ichiba/55666347.2df3b624.55666348.878f185b/?pc=https%3A%2F%2Fitem.rakuten.co.jp%2Fdarkangel%2Fto2305-1114%2F&link_type=picttext&ut=eyJwYWdlIjoiaXRlbSIsInR5cGUiOiJwaWN0dGV4dCIsInNpemUiOiIyNDB4MjQwIiwibmFtIjoxLCJuYW1wIjoicmlnaHQiLCJjb20iOjEsImNvbXAiOiJkb3duIiwicHJpY2UiOjEsImJvciI6MSwiY29sIjoxLCJiYnRuIjoxLCJwcm9kIjowLCJhbXAiOmZhbHNlfQ%3D%3D",
+      "cta": "楽天市場で見る",
+      "priority": 50,
+      "weight": 50,
+      "startAt": null,
+      "endAt": null,
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": [
+          "/",
+          "/index.html",
+          "/shops.html",
+          "/area-*.html",
+          "/genre-other.html",
+          "/genre-izakaya.html"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "all"
+        ],
+        "sources": [
+          "all"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
+      }
+    },
+    {
+      "id": "rakuten-shop-feature",
+      "active": true,
+      "asp": "rakuten-market",
+      "sponsored": true,
+      "label": "PR",
+      "title": "楽天市場のおすすめショップ",
+      "description": "楽天市場で開催中のショップ企画やおすすめ商品をチェックできます。",
+      "imageUrl": "https://hbb.afl.rakuten.co.jp/hsb/5599ac9e.159eb3d4.5547dfc7.ed412751/?me_id=2100001&me_adv_id=697963&t=pict",
+      "destinationUrl": "https://hb.afl.rakuten.co.jp/hsc/5599ac9e.159eb3d4.5547dfc7.ed412751/?link_type=pict&ut=eyJwYWdlIjoic2hvcCIsInR5cGUiOiJwaWN0IiwiY29sIjoxLCJjYXQiOiIxMjEiLCJiYW4iOjY5Nzk2MywiYW1wIjpmYWxzZX0%3D",
+      "cta": "特集を見る",
+      "priority": 50,
+      "weight": 50,
+      "startAt": null,
+      "endAt": null,
+      "frequencyCapHours": 0,
+      "targeting": {
+        "paths": [
+          "/",
+          "/index.html",
+          "/shops.html",
+          "/area-*.html",
+          "/genre-other.html",
+          "/genre-izakaya.html"
+        ],
+        "categories": [
+          "all"
+        ],
+        "devices": [
+          "all"
+        ],
+        "sources": [
+          "all"
+        ],
+        "visitorTypes": [
+          "all"
+        ]
+      }
     }
   ],
   "reviewMode": {
     "active": false,
-    "reason": "Rakuten affiliate display restored",
+    "reason": "Additional Rakuten affiliate tags added",
     "updatedAt": "2026-07-10"
   }
 }
