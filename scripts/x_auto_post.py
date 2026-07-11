@@ -661,7 +661,7 @@ def recent_x_history(
         )
 
     page_limit = (
-        3 if not history.get("siteHistoryInitialized") else 1
+        10 if not history.get("siteHistoryInitialized") else 1
     )
     cutoff = now.astimezone(UTC) - timedelta(
         days=COOLDOWN_DAYS
