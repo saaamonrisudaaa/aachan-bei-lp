@@ -23,6 +23,8 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
 
     steps:
       - name: Check out repository
@@ -33,7 +35,7 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Fetch latest public Instagram posts
+      - name: Fetch latest Instagram posts
         run: python scripts/sync_instagram.py
 
       - name: Commit updated feed
