@@ -1,6 +1,12 @@
 name: X auto post
 
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/x-auto-post.yml"
+      - "scripts/x_auto_post.py"
   schedule:
     # 07:30, 15:30 and 19:30 Japan Standard Time (UTC+9)
     - cron: "30 22 * * *"
@@ -41,7 +47,7 @@ jobs:
       X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
       X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
       SLOT: ${{ inputs.slot || 'auto' }}
-      DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+      DRY_RUN: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
 
     steps:
       - name: Check out repository
