@@ -25,7 +25,7 @@ on:
         type: boolean
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: x-auto-post
@@ -60,3 +60,18 @@ jobs:
             args+=(--dry-run)
           fi
           python scripts/x_auto_post.py "${args[@]}"
+
+      - name: Save successful post history
+        if: ${{ env.DRY_RUN != 'true' }}
+        shell: bash
+        run: |
+          git add data/x-post-history.json
+          if git diff --cached --quiet; then
+            echo "X post history is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Record X auto post history"
+          git pull --rebase origin main
+          git push
