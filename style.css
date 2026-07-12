@@ -678,3 +678,92 @@ dd {
   order: 99;
   margin-bottom: 0;
 }
+
+.meal-gallery {
+  padding-top: 52px;
+}
+
+.meal-gallery > .section-head > p {
+  max-width: 560px;
+  color: var(--muted);
+  line-height: 1.8;
+}
+
+.meal-photo-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.meal-photo-card {
+  margin: 0;
+  overflow: hidden;
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 18px;
+  box-shadow: 4px 5px 0 rgba(56, 37, 29, 0.82);
+}
+
+.meal-photo-frame {
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #f4e5dc;
+}
+
+.meal-photo-card img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.meal-photo-card:nth-child(1) img {
+  object-position: 50% 58%;
+}
+
+.meal-photo-card:nth-child(2) img {
+  object-position: 50% 57%;
+}
+
+.meal-photo-card:nth-child(3) img {
+  object-position: 50% 54%;
+}
+
+.meal-photo-card:hover img {
+  transform: scale(1.025);
+}
+
+.meal-photo-card figcaption {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+}
+
+.meal-photo-card figcaption span {
+  color: #9f3f62;
+  font-family: "M PLUS Rounded 1c", sans-serif;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.meal-photo-card figcaption strong {
+  font-size: 14px;
+  line-height: 1.5;
+  text-align: right;
+}
+
+@media (max-width: 760px) {
+  .meal-photo-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .meal-photo-frame {
+    aspect-ratio: 16 / 10;
+  }
+}
