@@ -3,13 +3,20 @@
   "cooldownDays": 90,
   "siteHistoryInitialized": true,
   "xUserId": "2033452952304922624",
-  "updatedAt": "2026-07-11T23:26:41.144314+00:00",
+  "updatedAt": "2026-07-12T23:26:00.932748+00:00",
   "posts": [
     {
       "sourceType": "site",
+      "sourceUrl": "https://achanbay.com/restaurant-016.html",
+      "title": "Mole TAQUERIA Y BAR",
+      "postedAt": "2026-07-12T23:26:00.932748+00:00",
+      "postId": "2076448024629235946"
+    },
+    {
+      "sourceType": "site",
       "sourceUrl": "https://achanbay.com/restaurant-062.html",
-      "title": "とんかつ 暁",
-      "postedAt": "2026-07-11T23:26:41.144314+00:00",
+      "title": "",
+      "postedAt": "2026-07-11T23:26:42+00:00",
       "postId": "2076085804028641317"
     },
     {
