@@ -1,1 +1,4 @@
 /photo-library/
+__pycache__/
+*.pyc
+.tmp/

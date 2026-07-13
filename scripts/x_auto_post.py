@@ -22,6 +22,14 @@ from datetime import datetime, timedelta, timezone
 from html.parser import HTMLParser
 from pathlib import Path
 
+from x_post_shared import (
+    assert_not_posted,
+    compose_post,
+    record_posted_text,
+    validate_post_text,
+    visible_body_length,
+)
+
 SITE_URL = "https://achanbay.com"
 SITEMAP_URL = f"{SITE_URL}/sitemap.xml"
 X_POST_URL = "https://api.x.com/2/tweets"
@@ -273,14 +281,17 @@ def choose_slot(requested: str, now: datetime) -> tuple[str, int]:
     if requested != "auto":
         return requested, {
             "morning": 0,
-            "afternoon": 1,
-            "evening": 2,
+            "lunch": 1,
+            "afternoon": 2,
+            "evening": 3,
         }[requested]
-    if now.hour < 11:
+    if now.hour < 10:
         return "morning", 0
+    if now.hour < 14:
+        return "lunch", 1
     if now.hour < 18:
-        return "afternoon", 1
-    return "evening", 2
+        return "afternoon", 2
+    return "evening", 3
 
 
 def first_sentence(text: str, limit: int = 42) -> str:
@@ -338,28 +349,19 @@ def build_site_post(
     description: str,
     now: datetime,
 ) -> str:
-    labels = {
-        "morning": ("朝の実食グルメ", "今日のお店選びに"),
-        "afternoon": ("午後のお店探し", "次のランチ候補に"),
-        "evening": ("夜のグルメ案内", "次の外食候補に"),
+    hooks = {
+        "morning": "朝の店選び、これどう？",
+        "lunch": "今日のランチ候補に",
+        "afternoon": "次のお店探しに",
+        "evening": "今夜の候補、ここどう？",
     }
-    heading, prompt = labels[slot]
-    hook = first_sentence(description)
-    location = location_tag(title, description)
-    genre = genre_tag(description)
+    detail = first_sentence(description, limit=34)
+    body = f"「{title}」{detail}" if detail else f"「{title}」をチェック"
     tracked_url = (
         f"{url}?utm_source=x&utm_medium=social"
         f"&utm_campaign=auto_post_{slot}"
     )
-    lines = [
-        f"{now.month}/{now.day} {heading}",
-        f"「{title}」",
-        f"{prompt}。{hook}" if hook else f"{prompt}。",
-        "訪問メモはこちら",
-        tracked_url,
-        f"#{location}グルメ #{genre}",
-    ]
-    return "\n".join(lines)
+    return compose_post(hooks[slot], body, tracked_url)
 
 
 def split_area_genre(value: str) -> tuple[str, str]:
@@ -374,26 +376,20 @@ def split_area_genre(value: str) -> tuple[str, str]:
 
 
 def build_tabelog_post(slot: str, candidate: dict, now: datetime) -> str:
-    labels = {
+    hooks = {
         "morning": "朝の気になる東京グルメ",
-        "afternoon": "次のランチ候補",
+        "lunch": "今日のランチ候補に",
+        "afternoon": "次のお店探しに",
         "evening": "夜の気になる東京グルメ",
     }
     area, genre = split_area_genre(candidate.get("areaGenre", ""))
     name = str(candidate["name"])[:38]
     rating = float(candidate["rating"])
-    tag = genre_tag(genre)
-    hashtags = "#東京グルメ" if tag == "東京グルメ" else f"#東京グルメ #{tag}"
-    return "\n".join(
-        [
-            f"{now.month}/{now.day} {labels[slot]}",
-            f"「{name}」",
-            f"{area} / {genre}",
-            f"食べログ評価 {rating:.2f}（取得時点）",
-            "未訪問の候補店です。最新の営業情報・評価は店舗ページで確認してください。",
-            str(candidate["url"]),
-            hashtags,
-        ]
+    body = f"「{name}」{area}・{genre} 評価{rating:.2f}（取得時）"
+    return compose_post(
+        hooks[slot],
+        body,
+        str(candidate["url"]),
     )
 
 
@@ -803,6 +799,7 @@ def main() -> int:
         choices=(
             "auto",
             "morning",
+            "lunch",
             "afternoon",
             "evening",
         ),
@@ -817,7 +814,7 @@ def main() -> int:
 
     now = datetime.now(JST)
     slot, slot_index = choose_slot(args.slot, now)
-    seed = now.date().toordinal() * 3 + slot_index
+    seed = now.date().toordinal() * 4 + slot_index
     history = load_history()
 
     x_history_synced = False
@@ -903,10 +900,14 @@ def main() -> int:
             slot, candidate, now
         )
 
+    post_text = validate_post_text(post_text)
+    assert_not_posted(post_text)
+
     print("--- X post preview ---")
     print(post_text)
     print(f"Source: {source_type} {source_url}")
     print(f"Characters: {len(post_text)}")
+    print(f"Non-URL characters: {visible_body_length(post_text)}")
 
     if args.dry_run:
         print(
@@ -918,6 +919,14 @@ def main() -> int:
     result = publish(post_text)
     post_id = str(
         result.get("data", {}).get("id") or "unknown"
+    )
+    post_url = f"https://x.com/somasaaamon/status/{post_id}"
+    record_posted_text(
+        post_text,
+        post_url=post_url,
+        source_url=source_url,
+        origin="api",
+        posted_at=now.astimezone(UTC).isoformat(),
     )
     new_record = {
         "sourceType": source_type,
@@ -935,11 +944,9 @@ def main() -> int:
         UTC
     ).isoformat()
     save_history(history)
-    print(
-        "Published successfully: "
-        f"https://x.com/somasaaamon/status/{post_id}"
-    )
+    print(f"Published successfully: {post_url}")
     print(f"History saved to {HISTORY_PATH}")
+    print("Posted-text log saved to data/x-posted-log.json")
     return 0
 
 
