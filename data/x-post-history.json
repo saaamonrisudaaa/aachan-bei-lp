@@ -1,93 +1,107 @@
 {
   "version": 1,
   "cooldownDays": 184,
+  "historyWindowDays": 184,
+  "historyBackfilledAt": "2026-07-15T01:29:17.645458+00:00",
   "siteHistoryInitialized": true,
   "xUserId": "2033452952304922624",
-  "updatedAt": "2026-07-12T23:26:00.932748+00:00",
+  "updatedAt": "2026-07-15T01:29:17.645458+00:00",
   "posts": [
     {
       "sourceType": "site",
       "sourceUrl": "https://achanbay.com/restaurant-016.html",
-      "title": "Mole TAQUERIA Y BAR",
-      "postedAt": "2026-07-12T23:26:00.932748+00:00",
-      "postId": "2076448024629235946"
+      "title": "",
+      "postedAt": "2026-07-12T23:26:02+00:00",
+      "postId": "2076448024629235946",
+      "textHash": ""
     },
     {
       "sourceType": "site",
       "sourceUrl": "https://achanbay.com/restaurant-062.html",
       "title": "",
       "postedAt": "2026-07-11T23:26:42+00:00",
-      "postId": "2076085804028641317"
+      "postId": "2076085804028641317",
+      "textHash": ""
     },
     {
       "sourceType": "site",
       "sourceUrl": "https://achanbay.com/yayaya-kinshicho.html",
       "title": "",
       "postedAt": "2026-07-11T11:29:05+00:00",
-      "postId": "2075905211076399589"
+      "postId": "2075905211076399589",
+      "textHash": ""
     },
     {
       "sourceType": "site",
       "sourceUrl": "https://achanbay.com/sta-kanda.html",
       "title": "",
       "postedAt": "2026-07-11T08:18:09+00:00",
-      "postId": "2075857163285627074"
+      "postId": "2075857163285627074",
+      "textHash": ""
     },
     {
       "sourceType": "site",
       "sourceUrl": "https://achanbay.com/sinensis-kichijoji.html",
       "title": "",
       "postedAt": "2026-07-10T23:28:34+00:00",
-      "postId": "2075723887703478778"
+      "postId": "2075723887703478778",
+      "textHash": ""
     },
     {
       "sourceType": "site",
       "sourceUrl": "https://achanbay.com/restaurant-076.html",
       "title": "",
       "postedAt": "2026-07-10T09:57:52+00:00",
-      "postId": "2075519868133331020"
+      "postId": "2075519868133331020",
+      "textHash": ""
     },
     {
       "sourceType": "site",
       "sourceUrl": "https://achanbay.com/restaurant-040.html",
       "title": "",
       "postedAt": "2026-07-09T23:45:58+00:00",
-      "postId": "2075365880179859530"
+      "postId": "2075365880179859530",
+      "textHash": ""
     },
     {
       "sourceType": "site",
       "sourceUrl": "https://achanbay.com/restaurant-030.html",
       "title": "",
       "postedAt": "2026-07-09T10:02:32+00:00",
-      "postId": "2075158654479978614"
+      "postId": "2075158654479978614",
+      "textHash": ""
     },
     {
       "sourceType": "site",
       "sourceUrl": "https://achanbay.com/pot-higashikurume.html",
       "title": "",
       "postedAt": "2026-07-08T23:35:33+00:00",
-      "postId": "2075000867699495177"
+      "postId": "2075000867699495177",
+      "textHash": ""
     },
     {
       "sourceType": "site",
       "sourceUrl": "https://achanbay.com/yayaya-kinshicho.html",
       "title": "",
       "postedAt": "2026-07-08T09:04:31+00:00",
-      "postId": "2074781665394577574"
+      "postId": "2074781665394577574",
+      "textHash": ""
     },
     {
       "sourceType": "site",
       "sourceUrl": "https://achanbay.com/sinensis-kichijoji.html",
       "title": "",
       "postedAt": "2026-07-07T23:29:44+00:00",
-      "postId": "2074637017758220668"
+      "postId": "2074637017758220668",
+      "textHash": ""
     },
     {
       "sourceType": "site",
       "sourceUrl": "https://achanbay.com/restaurant-076.html",
       "title": "",
       "postedAt": "2026-07-07T12:41:48+00:00",
-      "postId": "2074473961048453244"
+      "postId": "2074473961048453244",
+      "textHash": ""
     }
   ]
 }
