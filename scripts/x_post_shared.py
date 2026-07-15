@@ -5,15 +5,18 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit
 
 MAX_BODY_CHARS = 50
-QUEUE_PATH = Path("data/x-post-queue.json")
-POSTED_LOG_PATH = Path("data/x-posted-log.json")
+POST_COOLDOWN_DAYS = 184
+STATE_DIR = Path(os.environ.get("X_STATE_DIR") or "data")
+QUEUE_PATH = STATE_DIR / "x-post-queue.json"
+POSTED_LOG_PATH = STATE_DIR / "x-posted-log.json"
 URL_RE = re.compile(r"https?://[^\s]+", re.IGNORECASE)
 
 
@@ -145,17 +148,56 @@ def load_posted_log(path: Path = POSTED_LOG_PATH) -> dict[str, Any]:
     return payload
 
 
-def posted_hashes(log: dict[str, Any]) -> set[str]:
-    return {str(record["textHash"]) for record in log.get("posts", [])}
+def _parse_posted_at(value: Any) -> datetime | None:
+    if not value:
+        return None
+    try:
+        parsed = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if parsed.tzinfo is None:
+        parsed = parsed.replace(tzinfo=timezone.utc)
+    return parsed.astimezone(timezone.utc)
+
+
+def posted_hashes(
+    log: dict[str, Any],
+    *,
+    now: datetime | None = None,
+    cooldown_days: int = POST_COOLDOWN_DAYS,
+) -> set[str]:
+    """Return hashes posted inside the cooldown window.
+
+    Records without a usable timestamp are treated as recent so a damaged or
+    legacy log can never silently permit an unsafe repost.
+    """
+
+    reference = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
+    cutoff = reference - timedelta(days=cooldown_days)
+    hashes: set[str] = set()
+    for record in log.get("posts", []):
+        posted_at = _parse_posted_at(record.get("postedAt"))
+        if posted_at is None or posted_at >= cutoff:
+            hashes.add(str(record["textHash"]))
+    return hashes
 
 
 def assert_not_posted(
     text: str,
     log_path: Path = POSTED_LOG_PATH,
+    *,
+    now: datetime | None = None,
+    cooldown_days: int = POST_COOLDOWN_DAYS,
 ) -> str:
     digest = post_hash(text)
-    if digest in posted_hashes(load_posted_log(log_path)):
-        raise DuplicatePostError("This exact post text has already been published.")
+    if digest in posted_hashes(
+        load_posted_log(log_path),
+        now=now,
+        cooldown_days=cooldown_days,
+    ):
+        raise DuplicatePostError(
+            f"This exact post text was published inside the {cooldown_days}-day cooldown."
+        )
     return digest
 
 
@@ -168,20 +210,29 @@ def record_posted_text(
     queue_item_id: str | None = None,
     path: Path = POSTED_LOG_PATH,
     posted_at: str | None = None,
+    cooldown_days: int = POST_COOLDOWN_DAYS,
 ) -> dict[str, Any]:
     normalized = validate_post_text(text)
     digest = post_hash(normalized)
     log = load_posted_log(path)
-    for record in log["posts"]:
-        if record.get("textHash") == digest:
-            return record
+    effective_posted_at = posted_at or utc_now_iso()
+    reference = _parse_posted_at(effective_posted_at) or datetime.now(timezone.utc)
+    recent_hashes = posted_hashes(
+        log,
+        now=reference,
+        cooldown_days=cooldown_days,
+    )
+    if digest in recent_hashes:
+        for record in reversed(log["posts"]):
+            if record.get("textHash") == digest:
+                return record
     record = {
         "textHash": digest,
         "text": normalized,
         "sourceUrl": source_url,
         "origin": origin,
         "queueItemId": queue_item_id,
-        "postedAt": posted_at or utc_now_iso(),
+        "postedAt": effective_posted_at,
         "postUrl": post_url,
     }
     log["posts"].append(record)
@@ -224,7 +275,9 @@ def enqueue_post(
     text = compose_post(hook, body, url)
     digest = post_hash(text)
     if digest in posted_hashes(load_posted_log(log_path)):
-        raise DuplicatePostError("This exact post text has already been published.")
+        raise DuplicatePostError(
+            f"This exact post text was published inside the {POST_COOLDOWN_DAYS}-day cooldown."
+        )
 
     queue = load_queue(queue_path)
     if any(item.get("textHash") == digest for item in queue["items"]):

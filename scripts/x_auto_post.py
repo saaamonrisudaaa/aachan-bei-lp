@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Publish a restaurant post to X while enforcing a 90-day cooldown."""
+"""Prepare, publish, and record restaurant posts for @somasaaamon."""
 
 from __future__ import annotations
 
@@ -25,6 +25,7 @@ from pathlib import Path
 from x_post_shared import (
     assert_not_posted,
     compose_post,
+    post_hash,
     record_posted_text,
     validate_post_text,
     visible_body_length,
@@ -34,12 +35,34 @@ SITE_URL = "https://achanbay.com"
 SITEMAP_URL = f"{SITE_URL}/sitemap.xml"
 X_POST_URL = "https://api.x.com/2/tweets"
 X_ME_URL = "https://api.x.com/2/users/me"
-HISTORY_PATH = Path("data/x-post-history.json")
-COOLDOWN_DAYS = 90
+STATE_DIR = Path(os.environ.get("X_STATE_DIR") or "data")
+HISTORY_PATH = STATE_DIR / "x-post-history.json"
+EXPECTED_X_USERNAME = "somasaaamon"
+COOLDOWN_DAYS = 184
 HISTORY_RETENTION_DAYS = 400
+MAX_HISTORY_RECORDS = 7000
 TABELLOG_MIN_RATING = 3.5
 JST = timezone(timedelta(hours=9))
 UTC = timezone.utc
+REGION_PRIORITY = ("tokyo", "saitama", "kanagawa", "chiba")
+DAILY_POST_TIMES = (
+    "09:05",
+    "09:13",
+    "09:21",
+    "09:47",
+    "10:05",
+    "11:24",
+    "11:45",
+    "12:10",
+    "13:15",
+    "16:12",
+    "16:35",
+    "17:11",
+    "17:31",
+    "21:01",
+    "21:15",
+    "21:30",
+)
 
 EXCLUDED_PAGES = {
     "about.html",
@@ -58,11 +81,8 @@ EXCLUDED_PAGES = {
     "shops.html",
 }
 
-TABELLOG_SEARCH_URLS = tuple(
-    (
-        f"https://tabelog.com/tokyo/{area}/rstLst/"
-        "?SrtT=rt&Srt=D&sort_mode=1"
-    )
+TOKYO_TABELLOG_SEARCH_URLS = tuple(
+    f"https://tabelog.com/tokyo/{area}/rstLst/?SrtT=rt&Srt=D&sort_mode=1"
     for area in (
         "A1301",
         "A1302",
@@ -91,6 +111,21 @@ TABELLOG_SEARCH_URLS = tuple(
         "A1325",
         "A1326",
     )
+)
+TABELLOG_SEARCH_GROUPS = (
+    ("東京", TOKYO_TABELLOG_SEARCH_URLS),
+    (
+        "埼玉",
+        ("https://tabelog.com/saitama/rstLst/?SrtT=rt&Srt=D&sort_mode=1",),
+    ),
+    (
+        "神奈川",
+        ("https://tabelog.com/kanagawa/rstLst/?SrtT=rt&Srt=D&sort_mode=1",),
+    ),
+    (
+        "千葉",
+        ("https://tabelog.com/chiba/rstLst/?SrtT=rt&Srt=D&sort_mode=1",),
+    ),
 )
 
 
@@ -207,7 +242,9 @@ class TabelogSearchParser(HTMLParser):
             and rating_match
             and parsed.hostname
             and parsed.hostname.endswith("tabelog.com")
-            and parsed.path.startswith("/tokyo/")
+            and parsed.path.startswith(
+                ("/tokyo/", "/saitama/", "/kanagawa/", "/chiba/")
+            )
         ):
             self.results.append(
                 {
@@ -258,14 +295,44 @@ def article_urls() -> list[str]:
         filename = path.rsplit("/", 1)[-1]
         if filename.endswith(".html") and filename not in EXCLUDED_PAGES:
             urls.append(canonical_source_url(url))
+    for page in Path(".").glob("restaurant-*.html"):
+        urls.append(canonical_source_url(f"{SITE_URL}/{page.name}"))
     if not urls:
         raise RuntimeError("No restaurant article URLs were found in sitemap.xml.")
     return sorted(set(urls))
 
 
+def site_region(url: str) -> str | None:
+    filename = urllib.parse.urlsplit(url).path.rsplit("/", 1)[-1]
+    page = Path(filename)
+    if page.exists():
+        content = page.read_text(encoding="utf-8", errors="replace")
+        match = re.search(
+            r"https://tabelog\.com/(tokyo|saitama|kanagawa|chiba)/",
+            content,
+            flags=re.IGNORECASE,
+        )
+        if match:
+            return match.group(1).lower()
+    if filename in {
+        "pot-higashikurume.html",
+        "yayaya-kinshicho.html",
+        "sta-kanda.html",
+        "sinensis-kichijoji.html",
+    }:
+        return "tokyo"
+    return None
+
+
 def get_page_metadata(url: str) -> tuple[str, str]:
     parser = PageMetadataParser()
-    parser.feed(fetch_text(url))
+    filename = urllib.parse.urlsplit(url).path.rsplit("/", 1)[-1]
+    local_page = Path(filename)
+    if local_page.exists():
+        page_text = local_page.read_text(encoding="utf-8", errors="replace")
+    else:
+        page_text = fetch_text(url)
+    parser.feed(page_text)
     title = parser.meta.get("og:title") or parser.title
     description = parser.meta.get("og:description") or parser.meta.get(
         "description", ""
@@ -376,11 +443,12 @@ def split_area_genre(value: str) -> tuple[str, str]:
 
 
 def build_tabelog_post(slot: str, candidate: dict, now: datetime) -> str:
+    prefecture = normalize_text(str(candidate.get("prefecture") or "東京"))
     hooks = {
-        "morning": "朝の気になる東京グルメ",
+        "morning": f"朝の気になる{prefecture}グルメ",
         "lunch": "今日のランチ候補に",
         "afternoon": "次のお店探しに",
-        "evening": "夜の気になる東京グルメ",
+        "evening": f"夜の気になる{prefecture}グルメ",
     }
     area, genre = split_area_genre(candidate.get("areaGenre", ""))
     name = str(candidate["name"])[:38]
@@ -424,6 +492,8 @@ def default_history() -> dict:
     return {
         "version": 1,
         "cooldownDays": COOLDOWN_DAYS,
+        "historyWindowDays": 0,
+        "historyBackfilledAt": None,
         "siteHistoryInitialized": False,
         "xUserId": None,
         "updatedAt": None,
@@ -433,17 +503,55 @@ def default_history() -> dict:
 
 def load_history(path: Path = HISTORY_PATH) -> dict:
     if not path.exists():
-        return default_history()
+        seed_path = Path("data/x-post-history.json")
+        if path != seed_path and seed_path.exists():
+            path = seed_path
+        else:
+            return default_history()
+    return read_history_file(path)
+
+
+def read_history_file(path: Path) -> dict:
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
-    except (OSError, json.JSONDecodeError):
-        return default_history()
+    except (OSError, json.JSONDecodeError) as error:
+        raise RuntimeError(f"Cannot safely read X history {path}: {error}") from error
+    if not isinstance(payload, dict):
+        raise RuntimeError(f"X history {path} must contain a JSON object.")
     history = default_history()
-    if isinstance(payload, dict):
-        history.update(payload)
+    history.update(payload)
     if not isinstance(history.get("posts"), list):
-        history["posts"] = []
+        raise RuntimeError(f"X history {path} must contain a posts array.")
     return history
+
+
+def import_history_file(path: Path, now: datetime) -> dict:
+    incoming = read_history_file(path)
+    if not history_is_trusted(incoming):
+        raise RuntimeError("Imported X history is not backfilled for 184 days.")
+    history = load_history()
+    current_user_id = str(history.get("xUserId") or "").strip()
+    incoming_user_id = str(incoming.get("xUserId") or "").strip()
+    if current_user_id and incoming_user_id and current_user_id != incoming_user_id:
+        raise RuntimeError("Imported X history belongs to a different user ID.")
+    merge_history_records(history, list(incoming.get("posts", [])), now)
+    history["xUserId"] = incoming_user_id or current_user_id or None
+    history["siteHistoryInitialized"] = True
+    history["historyWindowDays"] = max(
+        int(history.get("historyWindowDays") or 0),
+        int(incoming.get("historyWindowDays") or 0),
+    )
+    history["historyBackfilledAt"] = incoming.get("historyBackfilledAt")
+    history["cooldownDays"] = COOLDOWN_DAYS
+    history["updatedAt"] = now.astimezone(UTC).isoformat()
+    save_history(history)
+    return history
+
+
+def history_is_trusted(history: dict) -> bool:
+    return bool(history.get("siteHistoryInitialized")) and int(
+        history.get("historyWindowDays") or 0
+    ) >= COOLDOWN_DAYS
 
 
 def recent_source_urls(history: dict, now: datetime) -> set[str]:
@@ -456,6 +564,17 @@ def recent_source_urls(history: dict, now: datetime) -> set[str]:
         )
         if posted_at and posted_at >= cutoff and source_url:
             recent.add(source_url)
+    return recent
+
+
+def recent_text_hashes(history: dict, now: datetime) -> set[str]:
+    cutoff = now.astimezone(UTC) - timedelta(days=COOLDOWN_DAYS)
+    recent: set[str] = set()
+    for record in history.get("posts", []):
+        posted_at = parse_timestamp(record.get("postedAt"))
+        digest = str(record.get("textHash") or "").strip()
+        if posted_at and posted_at >= cutoff and digest:
+            recent.add(digest)
     return recent
 
 
@@ -487,7 +606,7 @@ def merge_history_records(
         unique.values(),
         key=lambda item: str(item.get("postedAt") or ""),
         reverse=True,
-    )[:1000]
+    )[:MAX_HISTORY_RECORDS]
 
 
 def save_history(
@@ -632,32 +751,51 @@ def source_record_from_x_url(
         source_type = "tabelog"
     else:
         return None
+    text_hash = ""
+    try:
+        text_hash = post_hash(str(tweet.get("text") or ""))
+    except Exception:
+        pass
     return {
         "sourceType": source_type,
         "sourceUrl": canonical,
         "title": "",
         "postedAt": tweet.get("created_at"),
         "postId": tweet.get("id"),
+        "textHash": text_hash,
     }
 
 
 def recent_x_history(
     history: dict,
     now: datetime,
+    *,
+    force_full: bool = False,
 ) -> tuple[str, list[dict]]:
-    user_id = str(history.get("xUserId") or "").strip()
-    if not user_id:
-        me = x_request("GET", X_ME_URL)
-        user_id = str(
-            me.get("data", {}).get("id") or ""
-        ).strip()
+    me = x_request("GET", X_ME_URL)
+    authenticated = me.get("data", {})
+    username = str(authenticated.get("username") or "").strip().lstrip("@")
+    if username.casefold() != EXPECTED_X_USERNAME.casefold():
+        raise RuntimeError(
+            "X API credentials belong to @"
+            f"{username or 'unknown'}, not @{EXPECTED_X_USERNAME}."
+        )
+    user_id = str(authenticated.get("id") or "").strip()
     if not user_id:
         raise RuntimeError(
             "X API did not return the authenticated user ID."
         )
 
+    cached_user_id = str(history.get("xUserId") or "").strip()
+    if cached_user_id and cached_user_id != user_id:
+        raise RuntimeError(
+            "The authenticated X user ID does not match the stored account history."
+        )
+
     page_limit = (
-        10 if not history.get("siteHistoryInitialized") else 1
+        40
+        if force_full or not history.get("siteHistoryInitialized")
+        else 1
     )
     cutoff = now.astimezone(UTC) - timedelta(
         days=COOLDOWN_DAYS
@@ -723,14 +861,16 @@ def select_site_candidate(
     recent_urls: set[str],
     seed: int,
 ) -> str | None:
-    eligible = [
-        url
-        for url in urls
-        if canonical_source_url(url) not in recent_urls
-    ]
-    if not eligible:
-        return None
-    return eligible[seed % len(eligible)]
+    for region in REGION_PRIORITY:
+        eligible = [
+            url
+            for url in urls
+            if site_region(url) == region
+            and canonical_source_url(url) not in recent_urls
+        ]
+        if eligible:
+            return eligible[seed % len(eligible)]
+    return None
 
 
 def discover_tabelog_candidate(
@@ -738,50 +878,42 @@ def discover_tabelog_candidate(
     slot_index: int,
     recent_urls: set[str],
 ) -> dict | None:
-    start = (
-        now.date().toordinal() * 3 + slot_index
-    ) % len(TABELLOG_SEARCH_URLS)
-    candidates: dict[str, dict] = {}
-
-    for offset in range(
-        min(6, len(TABELLOG_SEARCH_URLS))
-    ):
-        search_url = TABELLOG_SEARCH_URLS[
-            (start + offset) % len(TABELLOG_SEARCH_URLS)
-        ]
-        try:
-            parser = TabelogSearchParser()
-            parser.feed(fetch_text(search_url))
-        except (OSError, urllib.error.URLError) as error:
-            print(
-                f"Tabelog search skipped: {error}",
-                file=sys.stderr,
-            )
-            continue
-        for candidate in parser.results:
-            url = canonical_source_url(
-                str(candidate["url"])
-            )
-            if (
-                float(candidate["rating"])
-                >= TABELLOG_MIN_RATING
-                and url not in recent_urls
-            ):
-                candidates[url] = candidate
-        if len(candidates) >= 12:
-            break
-
-    if not candidates:
-        return None
-    ordered = sorted(
-        candidates.values(),
-        key=lambda item: (
-            -float(item["rating"]),
-            str(item["name"]),
-        ),
-    )
     seed = now.date().toordinal() * 3 + slot_index
-    return ordered[seed % len(ordered)]
+    for prefecture, search_urls in TABELLOG_SEARCH_GROUPS:
+        start = seed % len(search_urls)
+        candidates: dict[str, dict] = {}
+        for offset in range(len(search_urls)):
+            search_url = search_urls[(start + offset) % len(search_urls)]
+            try:
+                parser = TabelogSearchParser()
+                parser.feed(fetch_text(search_url))
+            except (OSError, urllib.error.URLError) as error:
+                print(
+                    f"Tabelog search skipped ({prefecture}): {error}",
+                    file=sys.stderr,
+                )
+                continue
+            for candidate in parser.results:
+                url = canonical_source_url(str(candidate["url"]))
+                if (
+                    float(candidate["rating"]) >= TABELLOG_MIN_RATING
+                    and url not in recent_urls
+                ):
+                    normalized = dict(candidate)
+                    normalized["prefecture"] = prefecture
+                    candidates[url] = normalized
+            if len(candidates) >= 12:
+                break
+        if candidates:
+            ordered = sorted(
+                candidates.values(),
+                key=lambda item: (
+                    -float(item["rating"]),
+                    str(item["name"]),
+                ),
+            )
+            return ordered[seed % len(ordered)]
+    return None
 
 
 def publish(text: str) -> dict:
@@ -790,6 +922,146 @@ def publish(text: str) -> dict:
         X_POST_URL,
         json_payload={"text": text},
     )
+
+
+def prepared_payload(
+    *,
+    text: str,
+    source_type: str,
+    source_url: str,
+    title: str,
+    slot: str,
+    now: datetime,
+) -> dict:
+    return validate_prepared_payload(
+        {
+            "version": 1,
+            "username": EXPECTED_X_USERNAME,
+            "text": text,
+            "sourceType": source_type,
+            "sourceUrl": source_url,
+            "title": title,
+            "slot": slot,
+            "preparedAt": now.astimezone(UTC).isoformat(),
+        }
+    )
+
+
+def validate_prepared_payload(payload: dict) -> dict:
+    if not isinstance(payload, dict):
+        raise RuntimeError("Prepared post must be a JSON object.")
+    username = str(payload.get("username") or "").strip().lstrip("@")
+    if username.casefold() != EXPECTED_X_USERNAME.casefold():
+        raise RuntimeError(
+            f"Prepared post targets @{username or 'unknown'}, not @{EXPECTED_X_USERNAME}."
+        )
+    text = validate_post_text(str(payload.get("text") or ""))
+    source_type = str(payload.get("sourceType") or "").strip().lower()
+    if source_type not in {"site", "tabelog"}:
+        raise RuntimeError("Prepared post sourceType must be site or tabelog.")
+    source_url = canonical_source_url(str(payload.get("sourceUrl") or ""))
+    host = urllib.parse.urlsplit(source_url).hostname or ""
+    expected_host = "achanbay.com" if source_type == "site" else "tabelog.com"
+    if host != expected_host:
+        raise RuntimeError(
+            f"Prepared {source_type} post has an invalid source URL: {source_url}"
+        )
+    posted_source_url = canonical_source_url(text.splitlines()[2])
+    if posted_source_url != source_url:
+        raise RuntimeError(
+            "The prepared post URL does not match its declared sourceUrl."
+        )
+    slot = str(payload.get("slot") or "").strip()
+    if slot not in {"morning", "lunch", "afternoon", "evening"}:
+        raise RuntimeError("Prepared post has an invalid slot.")
+    prepared_at = str(payload.get("preparedAt") or "").strip()
+    if parse_timestamp(prepared_at) is None:
+        raise RuntimeError("Prepared post needs a valid preparedAt timestamp.")
+    return {
+        "version": 1,
+        "username": EXPECTED_X_USERNAME,
+        "text": text,
+        "sourceType": source_type,
+        "sourceUrl": source_url,
+        "title": normalize_text(str(payload.get("title") or "")),
+        "slot": slot,
+        "preparedAt": prepared_at,
+    }
+
+
+def load_prepared_file(path: Path) -> dict:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise RuntimeError(f"Cannot read prepared post {path}: {error}") from error
+    return validate_prepared_payload(payload)
+
+
+def save_prepared_file(path: Path, payload: dict) -> None:
+    normalized = validate_prepared_payload(payload)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(
+        json.dumps(normalized, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8",
+    )
+    temporary.replace(path)
+
+
+def confirmed_post_id(post_url: str) -> str:
+    parsed = urllib.parse.urlsplit(str(post_url).strip())
+    if (parsed.hostname or "").lower() not in {"x.com", "www.x.com"}:
+        raise RuntimeError("The confirmed post URL must be on x.com.")
+    match = re.fullmatch(
+        rf"/{re.escape(EXPECTED_X_USERNAME)}/status/(\d+)",
+        parsed.path.rstrip("/"),
+        flags=re.IGNORECASE,
+    )
+    if not match:
+        raise RuntimeError(
+            f"The confirmed post URL must belong to @{EXPECTED_X_USERNAME}."
+        )
+    return match.group(1)
+
+
+def record_prepared_post(
+    payload: dict,
+    *,
+    post_url: str,
+    origin: str,
+    now: datetime,
+    history: dict | None = None,
+) -> dict:
+    normalized = validate_prepared_payload(payload)
+    post_id = confirmed_post_id(post_url)
+    posted_at = now.astimezone(UTC).isoformat()
+    record = record_posted_text(
+        normalized["text"],
+        post_url=post_url,
+        source_url=normalized["sourceUrl"],
+        origin=origin,
+        posted_at=posted_at,
+    )
+    history = history or load_history()
+    merge_history_records(
+        history,
+        [
+            {
+                "sourceType": normalized["sourceType"],
+                "sourceUrl": normalized["sourceUrl"],
+                "title": normalized["title"],
+                "postedAt": posted_at,
+                "postId": post_id,
+                "textHash": post_hash(normalized["text"]),
+            }
+        ],
+        now,
+    )
+    history["version"] = 1
+    history["cooldownDays"] = COOLDOWN_DAYS
+    history["updatedAt"] = posted_at
+    save_history(history)
+    return record
 
 
 def main() -> int:
@@ -806,6 +1078,12 @@ def main() -> int:
         default="auto",
     )
     parser.add_argument("--dry-run", action="store_true")
+    parser.add_argument("--prepare-file", type=Path)
+    parser.add_argument("--publish-file", type=Path)
+    parser.add_argument("--record-file", type=Path)
+    parser.add_argument("--import-history-file", type=Path)
+    parser.add_argument("--sync-history", action="store_true")
+    parser.add_argument("--post-url")
     parser.add_argument(
         "--force-fallback",
         action="store_true",
@@ -813,19 +1091,109 @@ def main() -> int:
     args = parser.parse_args()
 
     now = datetime.now(JST)
+
+    file_modes = [
+        bool(args.prepare_file),
+        bool(args.publish_file),
+        bool(args.record_file),
+        bool(args.import_history_file),
+        bool(args.sync_history),
+    ]
+    if sum(file_modes) > 1:
+        parser.error(
+            "Prepared-file, history-import, and history-sync modes are mutually exclusive."
+        )
+    if args.post_url and not args.record_file:
+        parser.error("--post-url can only be used with --record-file.")
+    if args.import_history_file:
+        imported = import_history_file(args.import_history_file, now)
+        print(
+            "Imported trusted X history: "
+            f"{len(imported.get('posts', []))} linked posts"
+        )
+        return 0
+    if args.sync_history:
+        history = load_history()
+        user_id, x_records = recent_x_history(history, now, force_full=True)
+        history["xUserId"] = user_id
+        history["siteHistoryInitialized"] = True
+        history["historyWindowDays"] = COOLDOWN_DAYS
+        history["historyBackfilledAt"] = now.astimezone(UTC).isoformat()
+        merge_history_records(history, x_records, now)
+        history["cooldownDays"] = COOLDOWN_DAYS
+        history["updatedAt"] = now.astimezone(UTC).isoformat()
+        save_history(history)
+        print(f"Backfilled {len(x_records)} linked X posts for {COOLDOWN_DAYS} days.")
+        return 0
+    if args.record_file:
+        if not args.post_url:
+            parser.error("--record-file requires --post-url.")
+        payload = load_prepared_file(args.record_file)
+        record_prepared_post(
+            payload,
+            post_url=args.post_url,
+            origin="chrome",
+            now=now,
+        )
+        print(f"Recorded Chrome post: {args.post_url}")
+        return 0
+    if args.publish_file:
+        payload = load_prepared_file(args.publish_file)
+        history = load_history()
+        user_id, x_records = recent_x_history(
+            history,
+            now,
+            force_full=True,
+        )
+        history["xUserId"] = user_id
+        history["siteHistoryInitialized"] = True
+        history["historyWindowDays"] = COOLDOWN_DAYS
+        history["historyBackfilledAt"] = now.astimezone(UTC).isoformat()
+        merge_history_records(history, x_records, now)
+        if payload["sourceUrl"] in recent_source_urls(history, now):
+            raise RuntimeError(
+                f"Prepared source is inside the {COOLDOWN_DAYS}-day cooldown."
+            )
+        if post_hash(payload["text"]) in recent_text_hashes(history, now):
+            raise RuntimeError(
+                f"Prepared text is inside the {COOLDOWN_DAYS}-day cooldown."
+            )
+        assert_not_posted(payload["text"], now=now.astimezone(UTC))
+        result = publish(payload["text"])
+        post_id = str(result.get("data", {}).get("id") or "").strip()
+        if not post_id.isdigit():
+            raise RuntimeError("X API did not return a valid post ID.")
+        post_url = f"https://x.com/{EXPECTED_X_USERNAME}/status/{post_id}"
+        record_prepared_post(
+            payload,
+            post_url=post_url,
+            origin="api",
+            now=now,
+            history=history,
+        )
+        print(f"Published prepared post successfully: {post_url}")
+        return 0
+
     slot, slot_index = choose_slot(args.slot, now)
     seed = now.date().toordinal() * 4 + slot_index
     history = load_history()
 
-    x_history_synced = False
+    needs_full_history = not history_is_trusted(history)
     try:
         user_id, x_records = recent_x_history(
-            history, now
+            history,
+            now,
+            force_full=needs_full_history,
         )
         history["xUserId"] = user_id
         history["siteHistoryInitialized"] = True
+        if needs_full_history:
+            history["historyWindowDays"] = COOLDOWN_DAYS
+            history["historyBackfilledAt"] = now.astimezone(UTC).isoformat()
         merge_history_records(history, x_records, now)
-        x_history_synced = True
+        history["cooldownDays"] = COOLDOWN_DAYS
+        history["updatedAt"] = now.astimezone(UTC).isoformat()
+        save_history(history)
         print(
             "Recent X history synchronized: "
             f"{len(x_records)} linked posts"
@@ -837,15 +1205,18 @@ def main() -> int:
             file=sys.stderr,
         )
 
+    if not history_is_trusted(history):
+        raise RuntimeError(
+            "A verified 184-day X history backfill is required before preparing a post."
+        )
+
     recent_urls = recent_source_urls(history, now)
     source_type = ""
     source_url = ""
     title = ""
     post_text = ""
 
-    site_history_ready = bool(
-        history.get("siteHistoryInitialized")
-    )
+    site_history_ready = history_is_trusted(history)
     if (
         not args.force_fallback
         and site_history_ready
@@ -877,15 +1248,8 @@ def main() -> int:
         )
         if not candidate:
             reason = (
-                "recent X history was unavailable"
-                if (
-                    not site_history_ready
-                    and not x_history_synced
-                )
-                else (
-                    "all candidates are inside "
-                    "the 90-day cooldown"
-                )
+                "all candidates are inside "
+                f"the {COOLDOWN_DAYS}-day cooldown"
             )
             raise RuntimeError(
                 "No safe X post candidate was found: "
@@ -901,7 +1265,11 @@ def main() -> int:
         )
 
     post_text = validate_post_text(post_text)
-    assert_not_posted(post_text)
+    if post_hash(post_text) in recent_text_hashes(history, now):
+        raise RuntimeError(
+            f"Selected text is inside the {COOLDOWN_DAYS}-day cooldown."
+        )
+    assert_not_posted(post_text, now=now.astimezone(UTC))
 
     print("--- X post preview ---")
     print(post_text)
@@ -909,45 +1277,29 @@ def main() -> int:
     print(f"Characters: {len(post_text)}")
     print(f"Non-URL characters: {visible_body_length(post_text)}")
 
+    payload = prepared_payload(
+        text=post_text,
+        source_type=source_type,
+        source_url=source_url,
+        title=title,
+        slot=slot,
+        now=now,
+    )
+
+    if args.prepare_file:
+        save_prepared_file(args.prepare_file, payload)
+        print(f"Prepared post saved to {args.prepare_file}")
+        return 0
+
     if args.dry_run:
         print(
             "Dry run completed. "
             "Nothing was posted or saved."
         )
         return 0
-
-    result = publish(post_text)
-    post_id = str(
-        result.get("data", {}).get("id") or "unknown"
+    raise RuntimeError(
+        "Direct API publishing is disabled. Use --publish-file with a prepared payload."
     )
-    post_url = f"https://x.com/somasaaamon/status/{post_id}"
-    record_posted_text(
-        post_text,
-        post_url=post_url,
-        source_url=source_url,
-        origin="api",
-        posted_at=now.astimezone(UTC).isoformat(),
-    )
-    new_record = {
-        "sourceType": source_type,
-        "sourceUrl": source_url,
-        "title": title,
-        "postedAt": now.astimezone(UTC).isoformat(),
-        "postId": post_id,
-    }
-    merge_history_records(
-        history, [new_record], now
-    )
-    history["version"] = 1
-    history["cooldownDays"] = COOLDOWN_DAYS
-    history["updatedAt"] = now.astimezone(
-        UTC
-    ).isoformat()
-    save_history(history)
-    print(f"Published successfully: {post_url}")
-    print(f"History saved to {HISTORY_PATH}")
-    print("Posted-text log saved to data/x-posted-log.json")
-    return 0
 
 
 if __name__ == "__main__":

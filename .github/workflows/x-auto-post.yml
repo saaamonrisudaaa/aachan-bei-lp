@@ -27,6 +27,15 @@ on:
         required: true
         default: true
         type: boolean
+      prepared_payload_b64:
+        description: "Optional base64 JSON prepared by the Chrome-first workflow"
+        required: false
+        type: string
+      sync_history:
+        description: "Backfill and persist the full 184-day X history without posting"
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: write
@@ -46,6 +55,8 @@ jobs:
       X_ACCESS_TOKEN_SECRET: ${{ secrets.X_ACCESS_TOKEN_SECRET }}
       SLOT: ${{ inputs.slot || 'auto' }}
       DRY_RUN: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.dry_run) }}
+      PREPARED_PAYLOAD_B64: ${{ inputs.prepared_payload_b64 || '' }}
+      SYNC_HISTORY: ${{ inputs.sync_history || false }}
 
     steps:
       - name: Check out repository
@@ -65,14 +76,33 @@ jobs:
         shell: bash
         if: ${{ github.event_name == 'workflow_dispatch' }}
         run: |
-          args=(--slot "$SLOT")
-          if [[ "$DRY_RUN" == "true" ]]; then
-            args+=(--dry-run)
+          if [[ "$SYNC_HISTORY" == "true" ]]; then
+            if [[ -n "$PREPARED_PAYLOAD_B64" ]]; then
+              echo "sync_history cannot be combined with prepared_payload_b64" >&2
+              exit 2
+            fi
+            python scripts/x_auto_post.py --sync-history
+            exit 0
           fi
+          if [[ -n "$PREPARED_PAYLOAD_B64" ]]; then
+            if [[ "$DRY_RUN" == "true" ]]; then
+              echo "prepared_payload_b64 requires dry_run=false" >&2
+              exit 2
+            fi
+            printf '%s' "$PREPARED_PAYLOAD_B64" | base64 --decode > prepared-x-post.json
+            python scripts/x_auto_post.py --publish-file prepared-x-post.json
+            exit 0
+          fi
+          if [[ "$DRY_RUN" != "true" ]]; then
+            echo "Live API posting requires prepared_payload_b64" >&2
+            exit 2
+          fi
+          args=(--slot "$SLOT")
+          args+=(--dry-run)
           python scripts/x_auto_post.py "${args[@]}"
 
       - name: Save successful post history
-        if: ${{ env.DRY_RUN != 'true' }}
+        if: ${{ env.SYNC_HISTORY == 'true' || env.DRY_RUN != 'true' }}
         shell: bash
         run: |
           git add data/x-post-history.json data/x-posted-log.json
