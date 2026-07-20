@@ -542,17 +542,6 @@ dd {
   align-items: start;
 }
 
-.ad-label {
-  display: inline-flex;
-  margin: 0 0 18px;
-  padding: 8px 12px;
-  background: #fff8ed;
-  border: 1px solid #edc9a8;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-}
-
 .shop-info {
   position: sticky;
   top: 96px;
@@ -661,22 +650,6 @@ dd {
 .ranking-heading {
   font-size: clamp(26px, 3.2vw, 38px);
   white-space: nowrap;
-}
-
-/* Keep shop reviews first and place their Rakuten recommendation at the end. */
-.article-main:has(> .rakuten-pick) {
-  display: flex;
-  flex-direction: column;
-}
-
-.article-main:has(> .rakuten-pick) > .ad-label {
-  order: 98;
-  margin: 30px 0 18px;
-}
-
-.article-main:has(> .rakuten-pick) > .rakuten-pick {
-  order: 99;
-  margin-bottom: 0;
 }
 
 .meal-gallery {
